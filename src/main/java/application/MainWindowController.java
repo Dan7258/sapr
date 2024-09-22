@@ -8,7 +8,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Line;
+import javafx.scene.control.SplitPane;
 
 public class MainWindowController {
 
@@ -17,6 +17,9 @@ public class MainWindowController {
 
     @FXML
     private URL location;
+
+    @FXML
+    private SplitPane splitArea;
 
     @FXML
     private Tab btn2D;
@@ -55,6 +58,7 @@ public class MainWindowController {
 
     @FXML
     void initialize() {
+        assert splitArea != null : "fx:id=\"SplitArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btn2D != null : "fx:id=\"btn2D\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btn3D != null : "fx:id=\"btn3D\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnCircle != null : "fx:id=\"btnCircle\" was not injected: check your FXML file 'mainWindow.fxml'.";
@@ -67,7 +71,8 @@ public class MainWindowController {
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
 
-        coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
+        coordinateSystem = new CoordinateSystem(splitArea, workingArea, mouseCoordinates);
+        
     }
 
 }

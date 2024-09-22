@@ -1,6 +1,8 @@
 package application;
 
+import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 
@@ -9,14 +11,22 @@ public class CoordinateSystem {
 
     private Line xAxis;
     private Line yAxis;
+    private SplitPane splitArea;
     private AnchorPane workingArea;
     private Label mouseCoordinates;
+
+    private int oldMouseCoordX;
+    private int oldMouseCoordY;
+    private int oldAreaPositionX;
+    private int oldAreaPositionY;
     
-    public CoordinateSystem(AnchorPane workingArea, Label mouseCoordinates) {
+    public CoordinateSystem(SplitPane splitArea, AnchorPane workingArea, Label mouseCoordinates) {
         this.workingArea = workingArea;
         this.mouseCoordinates = mouseCoordinates;
+        this.splitArea = splitArea;
         createAxes();
         showMouseCoordinates();
+        enablePanning();
     } 
 
 
@@ -40,6 +50,32 @@ public class CoordinateSystem {
         });
     } 
 
+    private void enablePanning() {
 
+        workingArea.setOnMousePressed(event -> {
+            if(event.isPrimaryButtonDown() && event.isSecondaryButtonDown()) {
+                oldMouseCoordX = (int)event.getSceneX();
+                oldMouseCoordY = (int)event.getSceneY();
+                oldAreaPositionX = (int)workingArea.getTranslateX();
+                oldAreaPositionY = (int)workingArea.getTranslateY();
+            }
+
+            
+        });
+
+        workingArea.setOnMouseDragged(event -> {
+            if(event.isPrimaryButtonDown() && event.isSecondaryButtonDown()) {
+                double deltaX = event.getSceneX() - oldMouseCoordX;
+                double deltaY = event.getSceneY() - oldMouseCoordY;
+                workingArea.setTranslateX(oldAreaPositionX + deltaX);
+                workingArea.setTranslateY(oldAreaPositionY + deltaY);
+                
+                
+            }
+
+            
+        });
+
+    }
 
 }

@@ -83,7 +83,7 @@
             <Insets bottom="5.0" left="1.0" />
          </opaqueInsets>
       </TabPane>
-      <SplitPane dividerPositions="0.1454640250260688" layoutY="110.0" prefHeight="970.0" prefWidth="1920.0">
+      <SplitPane fx:id="SplitArea" dividerPositions="0.1454640250260688" layoutY="110.0" prefHeight="970.0" prefWidth="1920.0">
         <items>
           <AnchorPane fx:id="settingArea" minHeight="0.0" minWidth="0.0" prefHeight="968.0" prefWidth="170.0">
                <children>
