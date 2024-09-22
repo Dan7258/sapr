@@ -50,15 +50,8 @@ public class MainWindowController {
 
     @FXML
     private Label mouseCoordinates;
-
-
-    private double mouseX;
-    private double mouseY;
-    private double translateX;
-    private double translateY;
-    private Line xAxis;
-    private Line yAxis;
-
+    
+    CoordinateSystem coordinateSystem;
 
     @FXML
     void initialize() {
@@ -74,46 +67,7 @@ public class MainWindowController {
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
 
-    
-        createAxes();
-        enablePanning();
-        showMouseCoordinates();
+        coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
     }
-
-    private void createAxes() {
-        double width = workingArea.getPrefWidth();
-        double height = workingArea.getPrefHeight();
-
-        xAxis = new Line(0, 850, width, 850);
-        xAxis.setStyle("-fx-stroke: black;");
-        yAxis = new Line(50, 0, 50, height);
-        yAxis.setStyle("-fx-stroke: black;");
-
-        workingArea.getChildren().addAll(xAxis, yAxis);
-    }
-
-    private void enablePanning() {
-        workingArea.setOnMousePressed(event -> {
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-            translateX = workingArea.getTranslateX();
-            translateY = workingArea.getTranslateY();
-        });
-
-        workingArea.setOnMouseDragged(event -> {
-            double offsetX = event.getSceneX() - mouseX;
-            double offsetY = event.getSceneY() - mouseY;
-            workingArea.setTranslateX(translateX + offsetX);
-            workingArea.setTranslateY(translateY + offsetY);
-        });
-    }
-
-    private void showMouseCoordinates() {
-        workingArea.setOnMouseMoved(event-> {
-            int x = (int)event.getX();
-            int y = (int)event.getY();
-            mouseCoordinates.setText(String.format("X: %d, Y: %d", x - (int)(yAxis.getEndX()) , -y + (int)(xAxis.getEndY())));
-    });
-    }   
 
 }
