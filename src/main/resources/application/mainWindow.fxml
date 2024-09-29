@@ -83,7 +83,7 @@
             <Insets bottom="5.0" left="1.0" />
          </opaqueInsets>
       </TabPane>
-      <SplitPane fx:id="SplitArea" dividerPositions="0.1454640250260688" layoutY="110.0" prefHeight="970.0" prefWidth="1920.0">
+      <SplitPane fx:id="splitArea" dividerPositions="0.1454640250260688" layoutY="110.0" prefHeight="970.0" prefWidth="1920.0">
         <items>
           <AnchorPane fx:id="settingArea" minHeight="0.0" minWidth="0.0" prefHeight="968.0" prefWidth="170.0">
                <children>
@@ -92,7 +92,7 @@
                         <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                      </opaqueInsets>
                   </Slider>
-                  <Label fx:id="mouseCoordinates" layoutX="178.0" layoutY="832.0" prefHeight="30.0" prefWidth="73.0" />
+                  <Label fx:id="mouseCoordinates" layoutX="218.0" layoutY="837.0" AnchorPane.rightAnchor="25.0" />
                </children>
             </AnchorPane>
           <AnchorPane fx:id="workingArea" minHeight="0.0" minWidth="0.0" prefHeight="968.0" prefWidth="1737.0" />
