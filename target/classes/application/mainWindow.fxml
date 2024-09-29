@@ -13,7 +13,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="btnDot" accessibleRole="LIST_VIEW" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+<AnchorPane accessibleRole="LIST_VIEW" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
    <children>
       <MenuBar prefHeight="30.0" prefWidth="1920.0">
          <menus>
@@ -60,7 +60,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Точка" textAlignment="CENTER" />
+                        <Button fx:id="btnDot" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Точка" textAlignment="CENTER" />
                         <Button fx:id="btnLine" layoutX="80.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Линия" textAlignment="CENTER" />
                         <Button fx:id="btnRectangle" layoutX="160.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" text="Прямоугольник" textAlignment="CENTER" />
                         <Button fx:id="btnCircle" layoutX="280.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Окружность" textAlignment="CENTER" />

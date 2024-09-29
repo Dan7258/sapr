@@ -31,7 +31,7 @@ public class MainWindowController {
     private Button btnCircle;
 
     @FXML
-    private AnchorPane btnDot;
+    private Button btnDot;
 
     @FXML
     private Button btnLine;
@@ -55,6 +55,8 @@ public class MainWindowController {
     private Label mouseCoordinates;
     
     CoordinateSystem coordinateSystem;
+    DotFigure dotFigure;
+    Panning panning;
 
     @FXML
     void initialize() {
@@ -71,7 +73,11 @@ public class MainWindowController {
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
 
-        coordinateSystem = new CoordinateSystem(splitArea, workingArea, mouseCoordinates);
+        dotFigure = new DotFigure(workingArea, btnDot);
+        coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
+
+        panning = new Panning(workingArea, dotFigure, coordinateSystem);
+        
         
     }
 
