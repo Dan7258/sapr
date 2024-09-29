@@ -45,9 +45,9 @@ public class CoordinateSystem {
     }
 
     private void showMouseCoordinates() {
-        workingArea.setOnMouseMoved(event-> {
-            int x = (int)event.getX();
-            int y = (int)event.getY();
+        workingArea.setOnMouseMoved(e-> {
+            int x = (int)e.getX();
+            int y = (int)e.getY();
             mouseCoordinates.setText(String.format("X: %d, Y: %d", x - (int)(yAxis.getEndX()) , -y + (int)(xAxis.getEndY())));
         });
     } 
@@ -69,5 +69,12 @@ public class CoordinateSystem {
 
         yAxis.setStartX(yAxisPosition[0] + deltaX);
         yAxis.setEndX(yAxisPosition[2] + deltaX);
+    }
+
+    public int[] getXAxisPosition() {
+        return xAxisPosition;
+    }
+    public int[] getYAxisPosition() {
+        return yAxisPosition;
     }
 }

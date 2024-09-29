@@ -73,9 +73,10 @@ public class MainWindowController {
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
 
-        dotFigure = new DotFigure(workingArea, btnDot);
+        
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
-
+        dotFigure = new DotFigure(workingArea, settingArea, coordinateSystem, btnDot);
+        
         panning = new Panning(workingArea, dotFigure, coordinateSystem);
         
         

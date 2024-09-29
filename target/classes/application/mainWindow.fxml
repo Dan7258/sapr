@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -60,7 +60,10 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="btnDot" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Точка" textAlignment="CENTER" />
+                        <Button fx:id="btnDot" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Точка" textAlignment="CENTER">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                         <Button fx:id="btnLine" layoutX="80.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Линия" textAlignment="CENTER" />
                         <Button fx:id="btnRectangle" layoutX="160.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" text="Прямоугольник" textAlignment="CENTER" />
                         <Button fx:id="btnCircle" layoutX="280.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Окружность" textAlignment="CENTER" />
@@ -87,12 +90,7 @@
         <items>
           <AnchorPane fx:id="settingArea" minHeight="0.0" minWidth="0.0" prefHeight="968.0" prefWidth="170.0">
                <children>
-                  <Slider fx:id="slider" layoutX="25.0" layoutY="878.0" prefHeight="14.0" prefWidth="226.0">
-                     <opaqueInsets>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </opaqueInsets>
-                  </Slider>
-                  <Label fx:id="mouseCoordinates" layoutX="218.0" layoutY="837.0" AnchorPane.rightAnchor="25.0" />
+                  <Label fx:id="mouseCoordinates" layoutX="218.0" layoutY="837.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="25.0" />
                </children>
             </AnchorPane>
           <AnchorPane fx:id="workingArea" minHeight="0.0" minWidth="0.0" prefHeight="968.0" prefWidth="1737.0" />

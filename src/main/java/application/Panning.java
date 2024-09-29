@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class Panning {
@@ -22,18 +23,16 @@ public class Panning {
     }
 
     private void enablePanning() {
-        workingArea.setOnMousePressed(event -> {
-            if(event.isPrimaryButtonDown() && event.isSecondaryButtonDown()) {
-                oldMouseCoordX = (int)event.getX();
-                oldMouseCoordY = (int)event.getY();
-
-                coordinateSystem.updatePosition();
-                dotFigure.updatePosition();
-            }
+        workingArea.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
+            oldMouseCoordX = (int)event.getX();
+            oldMouseCoordY = (int)event.getY();
+            coordinateSystem.updatePosition();
+            dotFigure.updatePosition();
+            
         });
     
         workingArea.setOnMouseDragged(event -> {
-            if(event.isPrimaryButtonDown() && event.isSecondaryButtonDown()) {
+            if(event.isPrimaryButtonDown() ) {
                 double deltaX = event.getX() - oldMouseCoordX;
                 double deltaY = event.getY() - oldMouseCoordY;
 
