@@ -3,6 +3,7 @@ package application;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
@@ -58,6 +59,9 @@ public class MainWindowController {
     DotFigure dotFigure;
     Panning panning;
     Form form;
+    Scene scene;
+
+    
 
     @FXML
     void initialize() {
@@ -74,6 +78,8 @@ public class MainWindowController {
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         
+        
+
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
         form = new Form(settingArea, coordinateSystem);
         dotFigure = new DotFigure(workingArea, coordinateSystem, btnDot, form);
@@ -81,5 +87,6 @@ public class MainWindowController {
         
         
     }
+    
 
 }

@@ -1,11 +1,11 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -18,11 +18,13 @@ public class DotFigure {
     private Form form;
 
 
-    private int[][] listPosDots = new int[0][0];
-    private Circle[] listDots = new Circle[0];
+
+    private ArrayList<int[]> listPosDots = new ArrayList<>();
+    private ArrayList<Circle> listDots = new ArrayList<>();
+
+    private boolean isRightMousePressed = false;
     private boolean createModeEnable = false;
 
-    
     public DotFigure(AnchorPane workingArea, CoordinateSystem coordinateSystem, Button btnDot, Form form) {
         this.workingArea = workingArea;
         this.coordinateSystem = coordinateSystem;
@@ -46,7 +48,6 @@ public class DotFigure {
                 createModeEnableOn();
                 create();
             }
-            
         });
     }
 
@@ -88,52 +89,27 @@ public class DotFigure {
     }
 
     private void add(int x, int y) {
-        int[][] newListPosDots = new int[listPosDots.length + 1][2];
-        for(int i = 0; i < listPosDots.length; i++) {
-            newListPosDots[i][0] = listPosDots[i][0];
-            newListPosDots[i][1] = listPosDots[i][1]; 
-        }
+        listPosDots.add(new int[]{x, y});
 
-        newListPosDots[newListPosDots.length - 1][0] = x;
-        newListPosDots[newListPosDots.length - 1][1] = y;
+        listDots.add(new Circle(x, y, 6, Color.BLACK));
 
-        listPosDots = newListPosDots;
+        workingArea.getChildren().add(listDots.get(listDots.size() - 1));
 
-        Circle[] newListDots = new Circle[listDots.length + 1];
-        for(int i = 0; i < listDots.length; i++) {
-            newListDots[i] = listDots[i];
-        }
-
-        newListDots[newListDots.length - 1] = new Circle(listPosDots[listPosDots.length - 1][0], listPosDots[listPosDots.length - 1][1], 6, Color.BLACK);
-        hoverDot(newListDots[newListDots.length - 1]);
-
-        listDots = newListDots;
-
-        workingArea.getChildren().add(listDots[listDots.length - 1]);
+        hoverDot(listDots.get(listDots.size() - 1), listPosDots.get(listPosDots.size() - 1));
         
     }
 
-    public void updatePosition() {
-
-        for(int i = 0; i < listPosDots.length; i++) {
-            listPosDots[i][0] = (int)listDots[i].getCenterX();
-            listPosDots[i][1] = (int)listDots[i].getCenterY();
-        }
-    }
-
-    public void setPosition(double deltaX, double deltaY) {
-
-        for(int i = 0; i < listPosDots.length; i++) {
-            listDots[i].setCenterX(listPosDots[i][0] + deltaX);
-            listDots[i].setCenterY(listPosDots[i][1] + deltaY);
-        }
-    }
-
-    private void hoverDot(Circle dot) {
+    private void hoverDot(Circle dot, int[] posDot) {
         dot.setOnMouseClicked(event -> {
-            if(event.getClickCount() >= 2) {
-                changeCoordinate(dot);
+            if(event.getClickCount() >= 2 && event.getButton() == MouseButton.PRIMARY) {
                 dot.setFill(Color.GREEN);
+                changeCoordinate(dot);
+                
+            }
+            if(event.getButton() == MouseButton.SECONDARY) {
+                dot.setFill(Color.BLUE);
+                isRightMousePressed = true;
+                checkDeleteButton(dot, posDot);
             }
             if(event.getButton() == MouseButton.SECONDARY && createModeEnable) {
 
@@ -144,11 +120,57 @@ public class DotFigure {
         });
         dot.setOnMouseExited(event -> {
             
-            if (!dot.getFill().equals(Color.GREEN)) { 
+            if (!dot.getFill().equals(Color.GREEN) && !dot.getFill().equals(Color.BLUE)) { 
                 dot.setFill(Color.BLACK); 
             }
         });
     }
+
+    private void checkDeleteButton(Circle dot, int[] posDot) {
+        workingArea.getScene().setOnKeyPressed(event -> {
+            if (event.getCode() != KeyCode.DELETE || !isRightMousePressed) {
+                isRightMousePressed = false;
+                dot.setFill(Color.BLACK); 
+                
+            } else {
+                deleteDot(dot, posDot);
+                isRightMousePressed = false;
+            }
+        });
+        workingArea.setOnMouseClicked(event -> {
+            if (event.getButton() != MouseButton.SECONDARY) {
+                isRightMousePressed = false;
+                dot.setFill(Color.BLACK); 
+                
+            }
+        });
+    } 
+
+    private void deleteDot(Circle dot, int[] posDot) {
+        
+        listDots.remove(dot);
+        listPosDots.remove(posDot);
+        workingArea.getChildren().remove(dot);
+    }
+    
+
+    public void updatePosition() {
+
+        for(int i = 0; i < listPosDots.size(); i++) {
+            listPosDots.get(i)[0] = (int)listDots.get(i).getCenterX();
+            listPosDots.get(i)[1] = (int)listDots.get(i).getCenterY();
+        }
+    }
+
+    public void setPosition(double deltaX, double deltaY) {
+
+        for(int i = 0; i < listPosDots.size(); i++) {
+            listDots.get(i).setCenterX(listPosDots.get(i)[0] + deltaX);
+            listDots.get(i).setCenterY(listPosDots.get(i)[1] + deltaY);
+        }
+    }
+
+   
 
 
     private void changeCoordinate(Circle dot) {
