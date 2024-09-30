@@ -57,6 +57,7 @@ public class MainWindowController {
     CoordinateSystem coordinateSystem;
     DotFigure dotFigure;
     Panning panning;
+    Form form;
 
     @FXML
     void initialize() {
@@ -72,11 +73,10 @@ public class MainWindowController {
         assert mouseCoordinates != null : "fx:id=\"mouseCoordinates\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
-
         
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
-        dotFigure = new DotFigure(workingArea, settingArea, coordinateSystem, btnDot);
-        
+        form = new Form(settingArea, coordinateSystem);
+        dotFigure = new DotFigure(workingArea, coordinateSystem, btnDot, form);
         panning = new Panning(workingArea, dotFigure, coordinateSystem);
         
         

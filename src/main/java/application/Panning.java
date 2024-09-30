@@ -32,7 +32,7 @@ public class Panning {
         });
     
         workingArea.setOnMouseDragged(event -> {
-            if(event.isPrimaryButtonDown() ) {
+            if(event.isMiddleButtonDown() ) {
                 double deltaX = event.getX() - oldMouseCoordX;
                 double deltaY = event.getY() - oldMouseCoordY;
 
