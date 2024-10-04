@@ -114,34 +114,34 @@ public class LineFigure {
 
         workingArea.getChildren().addAll(listLines.get(listLines.size() - 1));
 
-        hoverLine(listLines.get(listLines.size() - 1), listPosLines.get(listPosLines.size() - 1));
+        // hoverLine(listLines.get(listLines.size() - 1), listPosLines.get(listPosLines.size() - 1));
         
     }
-    private void hoverLine(Node[] line, int[] posDot) {
-        dot.setOnMouseClicked(event -> {
-            if(event.getClickCount() >= 2 && event.getButton() == MouseButton.PRIMARY) {
-                dot.setFill(Color.GREEN);
-                changeCoordinate(dot);
+    // private void hoverLine(Node[] line, int[] posDot) {
+    //     dot.setOnMouseClicked(event -> {
+    //         if(event.getClickCount() >= 2 && event.getButton() == MouseButton.PRIMARY) {
+    //             dot.setFill(Color.GREEN);
+    //             changeCoordinate(dot);
                 
-            }
-            if(event.getButton() == MouseButton.PRIMARY) {
-                dot.setFill(Color.BLUE);
-                isRightMousePressed = true;
-                checkDeleteButton(dot, posDot);
-            }
-            if(event.getButton() == MouseButton.SECONDARY && createModeEnable) {
+    //         }
+    //         if(event.getButton() == MouseButton.PRIMARY) {
+    //             dot.setFill(Color.BLUE);
+    //             isRightMousePressed = true;
+    //             checkDeleteButton(dot, posDot);
+    //         }
+    //         if(event.getButton() == MouseButton.SECONDARY && createModeEnable) {
 
-            }
-        });
-        dot.setOnMouseEntered(event -> {
-            dot.setFill(Color.RED);
-        });
-        dot.setOnMouseExited(event -> {
+    //         }
+    //     });
+    //     dot.setOnMouseEntered(event -> {
+    //         dot.setFill(Color.RED);
+    //     });
+    //     dot.setOnMouseExited(event -> {
             
-            if (!dot.getFill().equals(Color.GREEN) && !dot.getFill().equals(Color.BLUE)) { 
-                dot.setFill(Color.BLACK); 
-            }
-        });
-    }
+    //         if (!dot.getFill().equals(Color.GREEN) && !dot.getFill().equals(Color.BLUE)) { 
+    //             dot.setFill(Color.BLACK); 
+    //         }
+    //     });
+    // }
     
 }

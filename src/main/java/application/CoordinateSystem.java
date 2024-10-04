@@ -2,7 +2,6 @@ package application;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 public class CoordinateSystem {

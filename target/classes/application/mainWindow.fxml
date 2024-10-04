@@ -58,7 +58,7 @@
         <tabs>
           <Tab fx:id="btn2D" closable="false" text="2Д режим">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane fx:id="area2d" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <Button fx:id="btnDot" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Точка" textAlignment="CENTER">
                            <cursor>

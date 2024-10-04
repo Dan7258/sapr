@@ -45,7 +45,6 @@ public class DotFigure {
     private void btnDotActive() {
         btnDot.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                createModeEnableOn();
                 create();
             }
         });
@@ -106,14 +105,12 @@ public class DotFigure {
                 changeCoordinate(dot);
                 
             }
-            if(event.getButton() == MouseButton.PRIMARY) {
+            if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                 dot.setFill(Color.BLUE);
                 isRightMousePressed = true;
                 checkDeleteButton(dot, posDot);
             }
-            if(event.getButton() == MouseButton.SECONDARY && createModeEnable) {
-
-            }
+            
         });
         dot.setOnMouseEntered(event -> {
             dot.setFill(Color.RED);
@@ -137,13 +134,13 @@ public class DotFigure {
                 isRightMousePressed = false;
             }
         });
-        workingArea.setOnMouseClicked(event -> {
-            if (event.getButton() != MouseButton.SECONDARY) {
-                isRightMousePressed = false;
-                dot.setFill(Color.BLACK); 
+        // workingArea.setOnMouseClicked(event -> {
+        //     if (event.getButton() != MouseButton.SECONDARY) {
+        //         isRightMousePressed = false;
+        //         dot.setFill(Color.BLACK); 
                 
-            }
-        });
+        //     }
+        // });
     } 
 
     private void deleteDot(Circle dot, int[] posDot) {

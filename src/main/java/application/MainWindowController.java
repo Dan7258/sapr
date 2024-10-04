@@ -2,6 +2,8 @@ package application;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +20,9 @@ public class MainWindowController {
 
     @FXML
     private URL location;
+
+    @FXML
+    private AnchorPane area2d;
 
     @FXML
     private SplitPane splitArea;
@@ -56,10 +61,13 @@ public class MainWindowController {
     private Label mouseCoordinates;
     
     CoordinateSystem coordinateSystem;
-    DotFigure dotFigure;
+    // DotFigure dotFigure;
     Panning panning;
     Form form;
     Scene scene;
+    Handler handler;
+    FigureRender figureRender;
+    FigureManager figureManager;
 
     
 
@@ -78,12 +86,18 @@ public class MainWindowController {
         assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         
-        
-
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
-        form = new Form(settingArea, coordinateSystem);
-        dotFigure = new DotFigure(workingArea, coordinateSystem, btnDot, form);
-        panning = new Panning(workingArea, dotFigure, coordinateSystem);
+        figureRender = new FigureRender(workingArea);
+        figureManager = new FigureManager(figureRender);
+        handler = new Handler(area2d, workingArea, coordinateSystem, figureManager);
+
+        // btnDot.setOnAction(new Handler(workingArea, coordinateSystem));
+        // btnLine.setOnAction(new Handler(workingArea, coordinateSystem));
+
+        
+        // form = new Form(settingArea, coordinateSystem);
+        // dotFigure = new DotFigure(workingArea, coordinateSystem, btnDot, form);
+        // panning = new Panning(workingArea, dotFigure, coordinateSystem);
         
         
     }
