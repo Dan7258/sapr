@@ -106,7 +106,7 @@ public class DotFigure {
                 changeCoordinate(dot);
                 
             }
-            if(event.getButton() == MouseButton.SECONDARY) {
+            if(event.getButton() == MouseButton.PRIMARY) {
                 dot.setFill(Color.BLUE);
                 isRightMousePressed = true;
                 checkDeleteButton(dot, posDot);
