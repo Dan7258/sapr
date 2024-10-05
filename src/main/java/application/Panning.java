@@ -9,15 +9,15 @@ public class Panning {
     private AnchorPane workingArea;
 
 
-    private DotFigure dotFigure;
+    private FigureManager figureManager;
     private CoordinateSystem coordinateSystem;
 
     private int oldMouseCoordX;
     private int oldMouseCoordY;
 
-    public Panning(AnchorPane workingArea, DotFigure dotFigure, CoordinateSystem coordinateSystem) {
+    public Panning(AnchorPane workingArea, FigureManager figureManager, CoordinateSystem coordinateSystem) {
         this.workingArea = workingArea;
-        this.dotFigure = dotFigure;
+        this.figureManager = figureManager;
         this.coordinateSystem = coordinateSystem;
         enablePanning();
     }
@@ -27,7 +27,7 @@ public class Panning {
             oldMouseCoordX = (int)event.getX();
             oldMouseCoordY = (int)event.getY();
             coordinateSystem.updatePosition();
-            dotFigure.updatePosition();
+            figureManager.updatePosition();
             
         });
     
@@ -37,7 +37,7 @@ public class Panning {
                 double deltaY = event.getY() - oldMouseCoordY;
 
                 coordinateSystem.setPosition(deltaX, deltaY);
-                dotFigure.setPosition(deltaX, deltaY);
+                figureManager.changePosition(deltaX, deltaY);
             }            
         });
     }

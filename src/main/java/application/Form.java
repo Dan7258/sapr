@@ -55,6 +55,21 @@ public class Form {
         deleteLabel();
         deleteTextField();
     }
+    public void updateTextField(String x, String y) {
+        settingArea.getChildren().removeAll(textFieldX, textFieldY);
+
+        textFieldX = new TextField();
+        textFieldX.setPromptText("X: " + x);
+        textFieldX.setLayoutX(20);
+        textFieldX.setLayoutY(50);
+        textFieldX.setPrefWidth(50);
+        textFieldY = new TextField();
+        textFieldY.setPromptText("Y: " + y);
+        textFieldY.setLayoutX(80);
+        textFieldY.setLayoutY(50);
+        textFieldY.setPrefWidth(50);
+        settingArea.getChildren().addAll(textFieldX, textFieldY);
+    }
 
     public int[] getDataFromForm() {
         int x;

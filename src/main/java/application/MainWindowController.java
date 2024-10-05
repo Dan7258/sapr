@@ -61,7 +61,6 @@ public class MainWindowController {
     private Label mouseCoordinates;
     
     CoordinateSystem coordinateSystem;
-    // DotFigure dotFigure;
     Panning panning;
     Form form;
     Scene scene;
@@ -73,7 +72,7 @@ public class MainWindowController {
 
     @FXML
     void initialize() {
-        assert splitArea != null : "fx:id=\"SplitArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert area2d != null : "fx:id=\"area2d\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btn2D != null : "fx:id=\"btn2D\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btn3D != null : "fx:id=\"btn3D\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnCircle != null : "fx:id=\"btnCircle\" was not injected: check your FXML file 'mainWindow.fxml'.";
@@ -81,23 +80,17 @@ public class MainWindowController {
         assert btnLine != null : "fx:id=\"btnLine\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnProperties != null : "fx:id=\"btnProperties\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnRectangle != null : "fx:id=\"btnRectangle\" was not injected: check your FXML file 'mainWindow.fxml'.";
-        assert settingArea != null : "fx:id=\"settingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert mouseCoordinates != null : "fx:id=\"mouseCoordinates\" was not injected: check your FXML file 'mainWindow.fxml'.";
-        assert slider != null : "fx:id=\"slider\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert settingArea != null : "fx:id=\"settingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert splitArea != null : "fx:id=\"splitArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
-        
+
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
         figureRender = new FigureRender(workingArea);
         figureManager = new FigureManager(figureRender);
-        handler = new Handler(area2d, workingArea, coordinateSystem, figureManager);
-
-        // btnDot.setOnAction(new Handler(workingArea, coordinateSystem));
-        // btnLine.setOnAction(new Handler(workingArea, coordinateSystem));
-
-        
-        // form = new Form(settingArea, coordinateSystem);
-        // dotFigure = new DotFigure(workingArea, coordinateSystem, btnDot, form);
-        // panning = new Panning(workingArea, dotFigure, coordinateSystem);
+        form = new Form(settingArea, coordinateSystem);
+        handler = new Handler(area2d, workingArea, figureManager, form);
+        panning = new Panning(workingArea, figureManager, coordinateSystem);
         
         
     }

@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
@@ -10,14 +11,21 @@ public class FigureRender {
     public FigureRender(AnchorPane workingArea) {
         this.workingArea = workingArea;
     }
-    public void render(Figure figure) {
+    public Node render(Figure figure) {
+        Node node = new Node(){};
         switch (figure.getType()) {
             case DOT:
-                workingArea.getChildren().add(new Circle(figure.getCoordinate()[0], figure.getCoordinate()[1], 6, figure.getColor()));
-                break;
+                Circle circle = new Circle(figure.getCoordinate()[0], figure.getCoordinate()[1], 6, figure.getColor());
+                workingArea.getChildren().add(circle);
+                return circle;
             case LINE:
 
                 break;
         }
+        return node;
+    }
+
+    public void erase(Figure figure) {
+        workingArea.getChildren().remove(figure.getLink());
     }
 }
