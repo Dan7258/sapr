@@ -23,6 +23,7 @@ public class LineP extends Primitive {
         this.y2 = y2;
         this.width = width;
         this.color = color;
+        this.line = new Line(x1, y1, x2, y2);
     }
 
     @Override

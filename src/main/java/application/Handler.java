@@ -1,9 +1,8 @@
 package application;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import application.Figures.FigureManager;
-import application.Primitives.PrimitiveEnum.Figures;
+import application.Figures.FigureEnum.Figures;
 import javafx.animation.PauseTransition;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -56,18 +55,20 @@ public class Handler {
             if (event.getButton() == MouseButton.PRIMARY && !createModeEnable && event.getTarget() != workingArea) {
                 pause.play();
                 pause.setOnFinished(e -> {
+                    if(event.getClickCount() == 2 ) {
+                        figureManager.changeColor((Node)event.getTarget(), Color.GREEN);
+                    }
                     if(event.getClickCount() == 1 ) {
                         figureManager.changeColor((Node)event.getTarget(), Color.BLUE);
                         checkDeleteButton((Node)event.getTarget());
                     }
-                    // if(event.getClickCount() == 2 ) {
-                    //     figureManager.changeColor((Node)event.getTarget(), Color.GREEN);
-                    // }
+                    
                 });  
                 
             }
             
         });
+        
 
     }
 
@@ -81,7 +82,15 @@ public class Handler {
                 workingArea.getScene().setOnKeyPressed(null);
             }
         });
+        workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                figureManager.changeColor(target, Color.BLACK);
+                workingArea.getScene().setOnKeyPressed(null);
+            }
+        });
     } 
+
+    
 
     private void btnDotIsPressed(Button button) {
         button.setText("Выбрано");
@@ -93,7 +102,7 @@ public class Handler {
                 int[] coord = new int[2];
                 coord[0] = (int) event.getX();
                 coord[1] = (int) event.getY();
-                figureManager.createFigure(coord, Figures.DOT);
+                figureManager.createFigure(coord, Figures.DOTF);
                 form.updateTextField("0", "0");
             }
             if (event.getButton() == MouseButton.SECONDARY) {
@@ -106,7 +115,7 @@ public class Handler {
         workingArea.getScene().setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 int[] coordinates = form.getDataFromForm();
-                figureManager.createFigure(coordinates, Figures.DOT);
+                figureManager.createFigure(coordinates, Figures.DOTF);
                 form.updateTextField("0", "0");
             }
         });
@@ -117,18 +126,15 @@ public class Handler {
         createModeEnable = true;
         int[] coord = new int[4];
         AtomicInteger i = new AtomicInteger(0);
-    
         handleCoordinateInput(button, coord, i);
     }
     
     private void handleCoordinateInput(Button button, int[] coord, AtomicInteger i) {
         if (i.get() >= 4) {
             if (createModeEnable) {
-                figureManager.createFigure(coord, Figures.LINE);
-                createModeEnable = false;
-                form.deleteFormCoord();
+                figureManager.createFigure(coord, Figures.SEGMENT);
+                i.set(0);
             }
-            return;
         }
     
         form.deleteFormCoord();
@@ -144,9 +150,6 @@ public class Handler {
                 coord[i.get() + 1] = (int) event.getY();
                 i.addAndGet(2);
                 handleCoordinateInput(button, coord, i); 
-                if(i.get() >= 3) {
-                    workingArea.setOnMouseClicked(null);
-                }
             }
             if (event.getButton() == MouseButton.SECONDARY) {
                 button.setText("Линия");
@@ -154,6 +157,7 @@ public class Handler {
                 createModeEnable = false;
                 form.deleteFormCoord();
                 i.set(4);
+                return;
             }
         });
     
@@ -163,15 +167,8 @@ public class Handler {
                 coord[i.get()] = coordinates[0];
                 coord[i.get() + 1] = coordinates[1];
                 i.addAndGet(2);
-                handleCoordinateInput(button, coord, i); 
-                if(i.get() >= 3) {
-                    workingArea.setOnMouseClicked(null);
-                }
-                
+                handleCoordinateInput(button, coord, i);                 
             }
         });
     }
-
-    
-
 }

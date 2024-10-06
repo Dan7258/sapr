@@ -1,9 +1,7 @@
 package application.Figures;
 
 import java.util.ArrayList;
-
-import application.Primitives.DotP;
-import application.Primitives.LineP;
+import application.Primitives.Primitive;
 import application.Figures.FigureEnum.Figures;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -54,20 +52,18 @@ public class FigureManager {
     }
 
     public void deleteFigure(Node node) {
-        
         Figure figure = searchFigure(node);
         if(figure != null) {
             figureRender.erase(figure);
             listFigures.remove(figure);
-        
             System.out.println(listFigures);
         }
-        
     }
 
     private Figure searchFigure(Node node) {
         for(Figure figure : listFigures) {
-            if(figure.getLink() == node) {
+            for(Primitive primitive: figure.getLink())
+            if(primitive.getLink() == node) {
                 return figure;
             }
         }

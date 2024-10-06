@@ -1,7 +1,5 @@
 package application.Primitives;
 
-import java.util.ArrayList;
-
 import application.Primitives.PrimitiveEnum.Primitives;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -20,6 +18,7 @@ public class DotP extends Primitive{
         this.y = y;
         this.radius = radius;
         this.color = color;
+        this.circle = new Circle(x,y, radius, color); 
     }
 
     @Override
