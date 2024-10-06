@@ -1,8 +1,8 @@
-package application;
+package application.Figures;
 
 public class FigureEnum {
     public enum Figures {
-        DOT, LINE
+        DOTF, SEGMENT
     }
 }
 

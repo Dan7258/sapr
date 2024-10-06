@@ -1,5 +1,6 @@
 package application;
 
+import application.Figures.FigureManager;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 

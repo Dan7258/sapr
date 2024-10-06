@@ -1,19 +1,21 @@
-package application;
+package application.Primitives;
 
-import application.FigureEnum.Figures;
+import java.util.ArrayList;
+
+import application.Primitives.PrimitiveEnum.Primitives;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Dot extends Figure{
+public class DotP extends Primitive{
     private int x;
     private int y;
     private int radius;
     private Color color;
     private Circle circle;
-    private Figures type = Figures.DOT;
+    private Primitives type = Primitives.DOT;
     
-    public Dot(int x, int y, int radius, Color color) {
+    public DotP(int x, int y, int radius, Color color) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -58,12 +60,17 @@ public class Dot extends Figure{
     }
 
     @Override
-    public Figures getType() {
+    public Primitives getType() {
         return type;
     }
 
     public void setRadius(int radius) {
         this.radius = radius;
+        circle.setRadius(radius);
+    }
+
+    public int getRadius() {
+        return this.radius;
     }
     
     @Override

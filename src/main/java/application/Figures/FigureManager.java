@@ -1,7 +1,10 @@
-package application;
+package application.Figures;
 
 import java.util.ArrayList;
-import application.FigureEnum.Figures;
+
+import application.Primitives.DotP;
+import application.Primitives.LineP;
+import application.Figures.FigureEnum.Figures;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 
@@ -17,14 +20,15 @@ public class FigureManager {
 
     public void createFigure(int[] coord, Figures type) {
         switch (type) {
-            case DOT:
-                Dot dot = new Dot(coord[0], coord[1], 6, Color.BLACK);
+            case DOTF:
+                DotF dot = new DotF(coord[0], coord[1], 6, Color.BLACK);
                 listFigures.add(dot);
-                Node node = figureRender.render(dot);
-                dot.setLink(node);
+                figureRender.render(dot);
                 break;
-            case LINE:
-
+            case SEGMENT:
+                Segment lineF = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 1, Color.BLACK);
+                listFigures.add(lineF);
+                figureRender.render(lineF);
                 break;
         }
     }
