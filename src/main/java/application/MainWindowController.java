@@ -61,6 +61,9 @@ public class MainWindowController {
 
     @FXML
     private Label mouseCoordinates;
+
+    @FXML
+    private Label mouseCoordinates1;
     
     CoordinateSystem coordinateSystem;
     Panning panning;
@@ -84,15 +87,16 @@ public class MainWindowController {
         assert btnProperties != null : "fx:id=\"btnProperties\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnRectangle != null : "fx:id=\"btnRectangle\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert mouseCoordinates != null : "fx:id=\"mouseCoordinates\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert mouseCoordinates1 != null : "fx:id=\"mouseCoordinates1\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert settingArea != null : "fx:id=\"settingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert splitArea != null : "fx:id=\"splitArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
 
-        coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates);
+        coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates, mouseCoordinates1);
         figureRender = new FigureRender(workingArea);
         figureManager = new FigureManager(figureRender);
         form = new Form(settingArea, coordinateSystem);
-        handler = new Handler(area2d, workingArea, figureManager, form);
+        handler = new Handler(area2d, workingArea, figureManager, coordinateSystem, form);
         panning = new Panning(workingArea, figureManager, coordinateSystem);
         zoom = new Zoom(workingArea, coordinateSystem);
         

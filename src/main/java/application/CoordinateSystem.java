@@ -1,6 +1,7 @@
 package application;
 
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 
@@ -13,10 +14,12 @@ public class CoordinateSystem {
     private int[] yAxisPosition = new int[4];
     private AnchorPane workingArea;
     private Label mouseCoordinates;
+    private Label mouseCoordinates1;
     
-    public CoordinateSystem(AnchorPane workingArea, Label mouseCoordinates) {
+    public CoordinateSystem(AnchorPane workingArea, Label mouseCoordinates, Label mouseCoordinates1) {
         this.workingArea = workingArea;
         this.mouseCoordinates = mouseCoordinates;
+        this.mouseCoordinates1 = mouseCoordinates1;
         createAxes();
         showMouseCoordinates();
         
@@ -48,8 +51,22 @@ public class CoordinateSystem {
             int x = (int)e.getX();
             int y = (int)e.getY();
             mouseCoordinates.setText(String.format("X: %d, Y: %d", x - (int)(yAxis.getEndX()) , -y + (int)(xAxis.getEndY())));
+            mouseCoordinates1.setText(String.format("X: %d, Y: %d", x , y)); 
+            
         });
     } 
+
+    public int[] getMouseCoordinate(MouseEvent event) {
+        return new int[]{(int)event.getX() - yAxisPosition[2],-(int)event.getY() + xAxisPosition[3]};
+    }
+
+    public int[] getFormatedCoordinate(int[] coord) {
+        for(int i = 0; i < coord.length;i+=2) {
+            coord[i] = coord[i] + yAxisPosition[0];
+            coord[i+1] = -coord[i+1] + xAxisPosition[1];
+        }
+        return coord;
+    }
 
 
     public void updatePosition() {

@@ -19,15 +19,17 @@ public class Handler {
     private AnchorPane workingArea;
     private FigureManager figureManager;
     private Form form;
+    private CoordinateSystem coordinateSystem;
     private boolean createModeEnable = false;
     
     PauseTransition pause = new PauseTransition(Duration.millis(170));
 
-    public Handler(AnchorPane area2d, AnchorPane workingArea, FigureManager figureManager, Form form) {
+    public Handler(AnchorPane area2d, AnchorPane workingArea, FigureManager figureManager, CoordinateSystem coordinateSystem, Form form) {
         this.area2d = area2d;
         this.workingArea = workingArea;
         this.figureManager = figureManager;
         this.form = form;
+        this.coordinateSystem = coordinateSystem;
         checkButtons();
         checkEvents();
     }
@@ -100,9 +102,8 @@ public class Handler {
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 int[] coord = new int[2];
-                coord[0] = (int) event.getX();
-                coord[1] = (int) event.getY();
-                figureManager.createFigure(coord, Figures.DOTF);
+                coord = coordinateSystem.getMouseCoordinate(event);
+                figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coord), Figures.DOTF);
                 form.updateTextField("0", "0");
             }
             if (event.getButton() == MouseButton.SECONDARY) {
@@ -120,6 +121,7 @@ public class Handler {
             }
         });
     }
+    
 
     private void btnLineIsPressed(Button button) {
         button.setText("Выбрано");
@@ -132,7 +134,8 @@ public class Handler {
     private void handleCoordinateInput(Button button, int[] coord, AtomicInteger i) {
         if (i.get() >= 4) {
             if (createModeEnable) {
-                figureManager.createFigure(coord, Figures.SEGMENT);
+                
+                figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coord), Figures.SEGMENT);
                 i.set(0);
             }
         }
@@ -146,8 +149,9 @@ public class Handler {
     
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                coord[i.get()] = (int) event.getX();
-                coord[i.get() + 1] = (int) event.getY();
+                int[] coordm = coordinateSystem.getMouseCoordinate(event);
+                coord[i.get()] = coordm[0];
+                coord[i.get() + 1] = coordm[1];
                 i.addAndGet(2);
                 handleCoordinateInput(button, coord, i); 
             }
@@ -161,14 +165,18 @@ public class Handler {
             }
         });
     
-        workingArea.getScene().setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                int[] coordinates = form.getDataFromForm();
-                coord[i.get()] = coordinates[0];
-                coord[i.get() + 1] = coordinates[1];
-                i.addAndGet(2);
-                handleCoordinateInput(button, coord, i);                 
-            }
-        });
+        // workingArea.getScene().setOnKeyPressed(event -> {
+        //     if (event.getCode() == KeyCode.ENTER) {
+        //         int[] coordinates = form.getDataFromForm();
+        //         coord[i.get()] = coordinates[0];
+        //         coord[i.get() + 1] = coordinates[1];
+        //         i.addAndGet(2);
+        //         handleCoordinateInput(button, coord, i);                 
+        //     }
+        // });
     }
+
+    
+
+    
 }
