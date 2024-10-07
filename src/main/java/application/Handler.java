@@ -47,7 +47,6 @@ public class Handler {
                         break;
                     }
                 }
-                
             });
         }
     }
@@ -64,14 +63,9 @@ public class Handler {
                         figureManager.changeColor((Node)event.getTarget(), Color.BLUE);
                         checkDeleteButton((Node)event.getTarget());
                     }
-                    
                 });  
-                
             }
-            
         });
-        
-
     }
 
     private void checkDeleteButton(Node target) {
@@ -104,7 +98,8 @@ public class Handler {
                 int[] coord = new int[2];
                 coord = coordinateSystem.getMouseCoordinate(event);
                 figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coord), Figures.DOTF);
-                form.updateTextField("0", "0");
+                form.deleteFormCoord();
+                form.createFormCoord("0", "0", "Введите координаты: ");
             }
             if (event.getButton() == MouseButton.SECONDARY) {
                 button.setText("Точка");
@@ -116,8 +111,9 @@ public class Handler {
         workingArea.getScene().setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 int[] coordinates = form.getDataFromForm();
-                figureManager.createFigure(coordinates, Figures.DOTF);
-                form.updateTextField("0", "0");
+                figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coordinates), Figures.DOTF);
+                form.deleteFormCoord();
+                form.createFormCoord("0", "0", "Введите координаты: ");
             }
         });
     }
@@ -142,9 +138,9 @@ public class Handler {
     
         form.deleteFormCoord();
         if (i.get() == 0) {
-            form.createFormCoord("0", "0", "Введите координаты левой границы: ");
+            form.createFormCoord("0", "0", "0", "0", "Введите координаты левой границы: ");
         } else {
-            form.createFormCoord("0", "0", "Введите координаты правой границы: ");
+            form.createFormCoord("0", "0", "0", "0", "Введите координаты правой границы: ");
         }
     
         workingArea.setOnMouseClicked(event -> {
@@ -165,18 +161,33 @@ public class Handler {
             }
         });
     
-        // workingArea.getScene().setOnKeyPressed(event -> {
-        //     if (event.getCode() == KeyCode.ENTER) {
-        //         int[] coordinates = form.getDataFromForm();
-        //         coord[i.get()] = coordinates[0];
-        //         coord[i.get() + 1] = coordinates[1];
-        //         i.addAndGet(2);
-        //         handleCoordinateInput(button, coord, i);                 
-        //     }
-        // });
+        workingArea.getScene().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                int[] data = form.getDataFromForm();
+                parseData(coord, data, i);
+                i.addAndGet(2);
+                handleCoordinateInput(button, coord, i);                 
+            }
+        });
     }
 
-    
-
+    private void parseData(int[] coord, int[] data, AtomicInteger i) {
+        if(data[2] == 0 && data[3] == 0) {
+            coord[i.get()] = data[0];
+            coord[i.get() + 1] = data[1];
+        } else {
+            if(i.get()==0) {
+                int x = 0 + (int)(Math.cos(data[3] * Math.PI / 180) * data[2]);
+                int y = 0 + (int)(Math.sin(data[3] * Math.PI / 180) * data[2]);
+                coord[i.get()] = x;
+                coord[i.get() + 1] = y;
+            } else {
+                int x = coord[0] + (int)(Math.cos(data[3] * Math.PI / 180) * data[2]);
+                int y = coord[1] + (int)(Math.sin(data[3] * Math.PI / 180) * data[2]);
+                coord[i.get()] = x;
+                coord[i.get() + 1] = y;
+            }
+        }
+    }
     
 }

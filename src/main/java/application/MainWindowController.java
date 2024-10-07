@@ -95,7 +95,7 @@ public class MainWindowController {
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates, mouseCoordinates1);
         figureRender = new FigureRender(workingArea);
         figureManager = new FigureManager(figureRender);
-        form = new Form(settingArea, coordinateSystem);
+        form = new Form(settingArea);
         handler = new Handler(area2d, workingArea, figureManager, coordinateSystem, form);
         panning = new Panning(workingArea, figureManager, coordinateSystem);
         zoom = new Zoom(workingArea, coordinateSystem);

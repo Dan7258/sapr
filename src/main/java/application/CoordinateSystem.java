@@ -50,8 +50,11 @@ public class CoordinateSystem {
         workingArea.setOnMouseMoved(e-> {
             int x = (int)e.getX();
             int y = (int)e.getY();
+            int angle = (int)(180 * Math.atan2(-y + (int)(xAxis.getEndY()), x - (int)(yAxis.getEndX())) / Math.PI);
+            int length = (int)Math.sqrt(Math.pow(x - (int)(yAxis.getEndX()), 2) + Math.pow(y - (int)(xAxis.getEndY()), 2));
+            mouseCoordinates1.setText(String.format("length: %d, ∠°: %d", length , angle )); 
             mouseCoordinates.setText(String.format("X: %d, Y: %d", x - (int)(yAxis.getEndX()) , -y + (int)(xAxis.getEndY())));
-            mouseCoordinates1.setText(String.format("X: %d, Y: %d", x , y)); 
+           
             
         });
     } 

@@ -7,20 +7,29 @@ import javafx.scene.layout.AnchorPane;
 public class Form {
 
     private AnchorPane settingArea;
-    private CoordinateSystem coordinateSystem;
 
     private TextField textFieldX;
     private TextField textFieldY;
+    private TextField textFieldLength;
+    private TextField textFieldAngle;
     private Label label;
+    private Label labelPolar;
 
-    public Form(AnchorPane settingArea, CoordinateSystem coordinateSystem) {
+    public Form(AnchorPane settingArea) {
         this.settingArea = settingArea;
-        this.coordinateSystem = coordinateSystem;
     }
 
     public void createFormCoord(String x, String y, String text){
         createLabel(text);
         createTextField(x, y);
+        
+    }
+
+    public void createFormCoord(String x, String y, String length, String angle, String text){
+        createLabel(text);
+        createTextField(x, y);
+        createLabelPolar();
+        createTextFieldPolar(length, angle);
         
     }
     public void createLabel(String text) {
@@ -44,6 +53,28 @@ public class Form {
         settingArea.getChildren().addAll(textFieldX, textFieldY);
     }
 
+    public void createLabelPolar() {
+        labelPolar = new Label();
+        labelPolar.setLayoutX(20);
+        labelPolar.setLayoutY(80);
+        labelPolar.setText("Введите полярные координаты:");
+        settingArea.getChildren().add(labelPolar);
+    }
+
+    public void createTextFieldPolar(String length, String angle) {
+        textFieldLength = new TextField();
+        textFieldLength.setPromptText("length: " + length);
+        textFieldLength.setLayoutX(20);
+        textFieldLength.setLayoutY(110);
+        textFieldLength.setPrefWidth(100);
+        textFieldAngle = new TextField();
+        textFieldAngle.setPromptText("∠°: " + angle);
+        textFieldAngle.setLayoutX(20);
+        textFieldAngle.setLayoutY(140);
+        textFieldAngle.setPrefWidth(100);
+        settingArea.getChildren().addAll(textFieldLength, textFieldAngle);
+    }
+
     public void deleteLabel() {
         settingArea.getChildren().remove(label);
     }
@@ -51,40 +82,47 @@ public class Form {
         settingArea.getChildren().removeAll(textFieldX, textFieldY);
     }
 
+    public void deleteLabelPolar() {
+        settingArea.getChildren().remove(labelPolar);
+    }
+    public void deleteTextFieldPolar() {
+        settingArea.getChildren().removeAll(textFieldLength, textFieldAngle);
+    }
+
     public void deleteFormCoord(){
         deleteLabel();
         deleteTextField();
-    }
-    public void updateTextField(String x, String y) {
-        settingArea.getChildren().removeAll(textFieldX, textFieldY);
-
-        textFieldX = new TextField();
-        textFieldX.setPromptText("X: " + x);
-        textFieldX.setLayoutX(20);
-        textFieldX.setLayoutY(50);
-        textFieldX.setPrefWidth(50);
-        textFieldY = new TextField();
-        textFieldY.setPromptText("Y: " + y);
-        textFieldY.setLayoutX(80);
-        textFieldY.setLayoutY(50);
-        textFieldY.setPrefWidth(50);
-        settingArea.getChildren().addAll(textFieldX, textFieldY);
+        deleteLabelPolar();
+        deleteTextFieldPolar();
+        
     }
 
     public int[] getDataFromForm() {
         int x;
         int y;
+        int length;
+        int angle;
         if(textFieldX.getText()!="") {
-            x = Integer.parseInt(textFieldX.getText()) + coordinateSystem.getYAxisPosition()[0]; 
+            x = Integer.parseInt(textFieldX.getText()); 
         } else {
-            x = Integer.parseInt(textFieldX.getPromptText().split(" ")[1]) + coordinateSystem.getYAxisPosition()[0]; 
+            x = Integer.parseInt(textFieldX.getPromptText().split(" ")[1]); 
         }
         if(textFieldY.getText()!="") {
-            y = -Integer.parseInt(textFieldY.getText()) + coordinateSystem.getXAxisPosition()[1];
+            y = Integer.parseInt(textFieldY.getText());
         } else {
-            y = -Integer.parseInt(textFieldY.getPromptText().split(" ")[1]) + coordinateSystem.getXAxisPosition()[1];
+            y = Integer.parseInt(textFieldY.getPromptText().split(" ")[1]);
         }
-        return new int[] {x, y};
+        if(textFieldLength.getText()!="") {
+            length = Integer.parseInt(textFieldLength.getText()); 
+        } else {
+            length = Integer.parseInt(textFieldLength.getPromptText().split(" ")[1]); 
+        }
+        if(textFieldAngle.getText()!="") {
+            angle = Integer.parseInt(textFieldAngle.getText()); 
+        } else {
+            angle = Integer.parseInt(textFieldAngle.getPromptText().split(" ")[1]); 
+        }
+        return new int[] {x, y, length, angle};
     }
 
     public TextField getTextFieldX() {
