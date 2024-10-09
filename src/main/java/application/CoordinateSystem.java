@@ -59,11 +59,11 @@ public class CoordinateSystem {
         });
     } 
 
-    public int[] getMouseCoordinate(MouseEvent event) {
-        return new int[]{(int)event.getX() - yAxisPosition[2],-(int)event.getY() + xAxisPosition[3]};
+    public int[] getRelativeCoordinate(int x, int y) {
+        return new int[]{x - yAxisPosition[2],-y + xAxisPosition[3]};
     }
 
-    public int[] getFormatedCoordinate(int[] coord) {
+    public int[] getAbsoluteCoordinate(int[] coord) {
         for(int i = 0; i < coord.length;i+=2) {
             coord[i] = coord[i] + yAxisPosition[0];
             coord[i+1] = -coord[i+1] + xAxisPosition[1];

@@ -24,7 +24,7 @@ public class FigureManager {
                 figureRender.render(dot);
                 break;
             case SEGMENT:
-                Segment lineF = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 1, Color.BLACK);
+                Segment lineF = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK);
                 listFigures.add(lineF);
                 figureRender.render(lineF);
                 break;

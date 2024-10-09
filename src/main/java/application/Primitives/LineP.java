@@ -24,6 +24,7 @@ public class LineP extends Primitive {
         this.width = width;
         this.color = color;
         this.line = new Line(x1, y1, x2, y2);
+        line.setStrokeWidth(width);
     }
 
     @Override

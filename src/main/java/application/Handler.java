@@ -11,6 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 
@@ -20,7 +21,7 @@ public class Handler {
     private FigureManager figureManager;
     private Form form;
     private CoordinateSystem coordinateSystem;
-    private boolean createModeEnable = false;
+    private boolean createMode = false;
     
     PauseTransition pause = new PauseTransition(Duration.millis(170));
 
@@ -53,7 +54,7 @@ public class Handler {
 
     private void checkEvents() {
         workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.getButton() == MouseButton.PRIMARY && !createModeEnable && event.getTarget() != workingArea) {
+            if (event.getButton() == MouseButton.PRIMARY && !createMode && event.getTarget() != workingArea) {
                 pause.play();
                 pause.setOnFinished(e -> {
                     if(event.getClickCount() == 2 ) {
@@ -86,32 +87,45 @@ public class Handler {
         });
     } 
 
-    
+    private void createModeEnable(Button button) {
+        button.setText("Выбрано");
+        createMode = true;
+        form.deleteFormCoord();
+    }
+
+    private void createModeDisable(Button button) {
+        switch (button.getId()) {
+            case "btnDot":
+            button.setText("Точка");
+            break;
+            case "btnLine":
+            button.setText("Линия");
+            break;
+        }
+        createMode = false;
+        form.deleteFormCoord();
+        workingArea.setOnMouseClicked(null);
+    }
 
     private void btnDotIsPressed(Button button) {
-        button.setText("Выбрано");
-        createModeEnable = true;
-        form.deleteFormCoord();
+        createModeEnable(button);
         form.createFormCoord("0", "0", "Введите координаты: ");
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 int[] coord = new int[2];
-                coord = coordinateSystem.getMouseCoordinate(event);
-                figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coord), Figures.DOTF);
+                coord = coordinateSystem.getRelativeCoordinate((int)event.getX(), (int)event.getY());
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.DOTF);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
             }
             if (event.getButton() == MouseButton.SECONDARY) {
-                button.setText("Точка");
-                workingArea.setOnMouseClicked(null);
-                createModeEnable = false;
-                form.deleteFormCoord();
+                createModeDisable(button);
             }
         });
         workingArea.getScene().setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 int[] coordinates = form.getDataFromForm();
-                figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coordinates), Figures.DOTF);
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coordinates), Figures.DOTF);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
             }
@@ -120,8 +134,7 @@ public class Handler {
     
 
     private void btnLineIsPressed(Button button) {
-        button.setText("Выбрано");
-        createModeEnable = true;
+        createModeEnable(button);
         int[] coord = new int[4];
         AtomicInteger i = new AtomicInteger(0);
         handleCoordinateInput(button, coord, i);
@@ -129,33 +142,27 @@ public class Handler {
     
     private void handleCoordinateInput(Button button, int[] coord, AtomicInteger i) {
         if (i.get() >= 4) {
-            if (createModeEnable) {
-                
-                figureManager.createFigure(coordinateSystem.getFormatedCoordinate(coord), Figures.SEGMENT);
+            if (createMode) {
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.SEGMENT);
                 i.set(0);
             }
         }
-    
         form.deleteFormCoord();
         if (i.get() == 0) {
             form.createFormCoord("0", "0", "0", "0", "Введите координаты левой границы: ");
         } else {
             form.createFormCoord("0", "0", "0", "0", "Введите координаты правой границы: ");
         }
-    
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                int[] coordm = coordinateSystem.getMouseCoordinate(event);
+                int[] coordm = choiceCoordinate(event);                
                 coord[i.get()] = coordm[0];
                 coord[i.get() + 1] = coordm[1];
                 i.addAndGet(2);
                 handleCoordinateInput(button, coord, i); 
             }
             if (event.getButton() == MouseButton.SECONDARY) {
-                button.setText("Линия");
-                workingArea.setOnMouseClicked(null);
-                createModeEnable = false;
-                form.deleteFormCoord();
+                createModeDisable(button);
                 i.set(4);
                 return;
             }
@@ -169,6 +176,17 @@ public class Handler {
                 handleCoordinateInput(button, coord, i);                 
             }
         });
+    }
+
+    private int[] choiceCoordinate(MouseEvent event) {
+        int[] coordm = new int[2];
+        if(event.getTarget() instanceof Circle) {
+            Circle circle = (Circle)event.getTarget();
+            coordm = coordinateSystem.getRelativeCoordinate((int)circle.getCenterX(), (int)circle.getCenterY());
+        } else {
+            coordm = coordinateSystem.getRelativeCoordinate((int)event.getX(), (int)event.getY());
+        }
+        return coordm;
     }
 
     private void parseData(int[] coord, int[] data, AtomicInteger i) {
