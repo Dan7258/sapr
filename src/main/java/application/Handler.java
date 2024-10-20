@@ -62,6 +62,7 @@ public class Handler {
                 pause.setOnFinished(e -> {
                     if(event.getClickCount() == 2 ) {
                         figureManager.changeColor((Node)event.getTarget(), Color.GREEN);
+                        figureManager.manageSettings((Node)event.getTarget());
                     }
                     if(event.getClickCount() == 1 ) {
                         figureManager.changeColor((Node)event.getTarget(), Color.BLUE);

@@ -33,10 +33,9 @@ public class Form {
         
     }
     public void createLabel(String text) {
-        label = new Label();
+        label = new Label(text);
         label.setLayoutX(20);
         label.setLayoutY(20);
-        label.setText(text);
         settingArea.getChildren().add(label);
     }
     public void createTextField(String x, String y) {
@@ -125,11 +124,6 @@ public class Form {
         return new int[] {x, y, length, angle};
     }
 
-    public TextField getTextFieldX() {
-        return textFieldX;
-    }
-    public TextField getTextFieldY() {
-        return textFieldY;
-    }
+
     
 }

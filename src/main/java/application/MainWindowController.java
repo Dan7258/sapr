@@ -93,8 +93,8 @@ public class MainWindowController {
         assert workingArea != null : "fx:id=\"workingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
 
         coordinateSystem = new CoordinateSystem(workingArea, mouseCoordinates, mouseCoordinates1);
-        figureRender = new FigureRender(workingArea);
-        figureManager = new FigureManager(figureRender);
+        figureRender = new FigureRender(workingArea, settingArea);
+        figureManager = new FigureManager(workingArea, figureRender, coordinateSystem);
         form = new Form(settingArea);
         handler = new Handler(area2d, workingArea, figureManager, coordinateSystem, form);
         panning = new Panning(workingArea, figureManager, coordinateSystem);

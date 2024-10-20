@@ -8,6 +8,7 @@ import application.Primitives.DotP;
 import application.Primitives.LineP;
 import application.Primitives.Primitive;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 
 public class Segment extends Figure {
@@ -100,6 +101,10 @@ public class Segment extends Figure {
         list.add(dotP2);
         list.add(lineP);
         return list;
+    }
+    @Override
+    public Control[] getSettings() {
+        return null;
     }
     
 }

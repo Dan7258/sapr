@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import application.Figures.FigureEnum.Figures;
 import application.Primitives.Primitive;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.paint.Color;
 
 public abstract class Figure {
@@ -17,4 +18,5 @@ public abstract class Figure {
     public abstract ArrayList<Primitive> getLink();
     public abstract void updatePosition();
     public abstract Figures getType();
+    public abstract Control[] getSettings();
 }
