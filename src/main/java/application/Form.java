@@ -98,10 +98,10 @@ public class Form {
     }
 
     public int[] getDataFromForm() {
-        int x;
-        int y;
-        int length;
-        int angle;
+        int x = 0;
+        int y = 0;
+        int length = 0;
+        int angle = 0;
         if(textFieldX.getText()!="") {
             x = Integer.parseInt(textFieldX.getText()); 
         } else {
@@ -112,14 +112,14 @@ public class Form {
         } else {
             y = Integer.parseInt(textFieldY.getPromptText().split(" ")[1]);
         }
-        if(textFieldLength.getText()!="") {
+        if(textFieldLength != null && textFieldLength.getText()!="") {
             length = Integer.parseInt(textFieldLength.getText()); 
-        } else {
+        } else if(textFieldLength != null && textFieldLength.getText()==""){
             length = Integer.parseInt(textFieldLength.getPromptText().split(" ")[1]); 
         }
-        if(textFieldAngle.getText()!="") {
+        if(textFieldAngle != null && textFieldAngle.getText()!="") {
             angle = Integer.parseInt(textFieldAngle.getText()); 
-        } else {
+        } else if(textFieldAngle != null && textFieldAngle.getText()==""){
             angle = Integer.parseInt(textFieldAngle.getPromptText().split(" ")[1]); 
         }
         return new int[] {x, y, length, angle};

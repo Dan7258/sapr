@@ -22,6 +22,8 @@ public class Handler {
     private Form form;
     private CoordinateSystem coordinateSystem;
     private boolean createMode = false;
+    private Node chooseFigure;
+    private Button chooseButton;
     
     PauseTransition pause = new PauseTransition(Duration.millis(170));
 
@@ -33,6 +35,7 @@ public class Handler {
         this.coordinateSystem = coordinateSystem;
         checkButtons();
         checkEvents();
+        checkchooseFigure();
     }
 
     private void checkButtons() {
@@ -87,13 +90,30 @@ public class Handler {
         });
     } 
 
+    private void checkchooseFigure() {
+        workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if(chooseFigure == null) {
+                chooseFigure = (Node)event.getTarget();
+            }
+            if(event.getTarget() != chooseFigure && chooseFigure != null) {
+                figureManager.changeColor(chooseFigure, Color.BLACK);
+                chooseFigure = (Node)event.getTarget();
+            } 
+        });
+
+    }
+
     private void createModeEnable(Button button) {
+        chooseButton = button;
         button.setText("Выбрано");
         createMode = true;
         form.deleteFormCoord();
     }
 
     private void createModeDisable(Button button) {
+        if (button == null) {
+            return;
+        }
         switch (button.getId()) {
             case "btnDot":
             button.setText("Точка");
@@ -108,6 +128,7 @@ public class Handler {
     }
 
     private void btnDotIsPressed(Button button) {
+        createModeDisable(chooseButton);
         createModeEnable(button);
         form.createFormCoord("0", "0", "Введите координаты: ");
         workingArea.setOnMouseClicked(event -> {
@@ -122,6 +143,7 @@ public class Handler {
                 createModeDisable(button);
             }
         });
+        
         workingArea.getScene().setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 int[] coordinates = form.getDataFromForm();
@@ -134,6 +156,7 @@ public class Handler {
     
 
     private void btnLineIsPressed(Button button) {
+        createModeDisable(chooseButton);
         createModeEnable(button);
         int[] coord = new int[4];
         AtomicInteger i = new AtomicInteger(0);
@@ -167,7 +190,6 @@ public class Handler {
                 return;
             }
         });
-    
         workingArea.getScene().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 int[] data = form.getDataFromForm();
