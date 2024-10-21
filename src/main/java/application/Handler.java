@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 
@@ -61,11 +62,12 @@ public class Handler {
                 pause.play();
                 pause.setOnFinished(e -> {
                     if(event.getClickCount() == 2 ) {
-                        figureManager.changeColor((Node)event.getTarget(), Color.GREEN);
+                        ((Shape)event.getTarget()).setFill(Color.GREEN);
                         figureManager.manageSettings((Node)event.getTarget());
                     }
                     if(event.getClickCount() == 1 ) {
-                        figureManager.changeColor((Node)event.getTarget(), Color.BLUE);
+                        //System.out.println("a ");
+                        ((Shape)event.getTarget()).setFill(Color.BLUE);
                         checkDeleteButton((Node)event.getTarget());
                     }
                 });  
@@ -79,13 +81,14 @@ public class Handler {
                 figureManager.deleteFigure(target);
                 workingArea.getScene().setOnKeyPressed(null);
             } else {
-                figureManager.changeColor(target, Color.BLACK);
+                figureManager.setDefaultColor(target);
                 workingArea.getScene().setOnKeyPressed(null);
             }
         });
         workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                figureManager.changeColor(target, Color.BLACK);
+            if (event.getButton() == MouseButton.SECONDARY || event.getButton() == MouseButton.PRIMARY) {
+                //System.out.println("b ");
+                figureManager.setDefaultColor(target);
                 workingArea.getScene().setOnKeyPressed(null);
             }
         });
@@ -97,7 +100,10 @@ public class Handler {
                 chooseFigure = (Node)event.getTarget();
             }
             if(event.getTarget() != chooseFigure && chooseFigure != null) {
-                figureManager.changeColor(chooseFigure, Color.BLACK);
+                //System.out.println("c ");
+                if(chooseFigure != workingArea) {
+                    figureManager.setDefaultColor(chooseFigure);
+                }
                 chooseFigure = (Node)event.getTarget();
             } 
         });

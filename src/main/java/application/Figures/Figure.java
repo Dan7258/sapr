@@ -19,4 +19,5 @@ public abstract class Figure {
     public abstract void updatePosition();
     public abstract Figures getType();
     public abstract Control[] getSettings();
+    public abstract void takeParamFromSettings();
 }

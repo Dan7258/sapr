@@ -15,13 +15,11 @@ import javafx.scene.paint.Color;
 public class DotF extends Figure{
     
     private CoordinateSystem coordinateSystem;
-    private Color color;
     private DotP dotP;
     private Figures type = Figures.DOTF;
     private Control[] settings;
     
     public DotF(int x, int y, int radius, Color color, CoordinateSystem coordinateSystem) {
-        this.color = color;
         dotP = new DotP(x, y, radius, color);
         this.coordinateSystem = coordinateSystem;
         setSettings();
@@ -49,12 +47,11 @@ public class DotF extends Figure{
 
     @Override
     public Color getColor() {
-        return color;
+        return dotP.getColor();
     }
 
     @Override
     public void setColor(Color color) {
-        this.color = color;
         dotP.setColor(color);
     }
 
@@ -82,9 +79,46 @@ public class DotF extends Figure{
         list.add(dotP);
         return list;
     }
+
     @Override
     public Control[] getSettings() {
         return settings;
+    }
+
+    @Override
+    public void takeParamFromSettings() {
+        int x;
+        int y;
+        int radius; 
+        Color color;
+
+        if(((TextField)settings[2]).getText()!="") {
+            x = Integer.parseInt(((TextField)settings[2]).getText()); 
+            x = coordinateSystem.getAbsoluteCoordinate(new int[]{x,0})[0];
+        } else {
+            x = dotP.getCoordinate()[0];
+        }
+        if(((TextField)settings[4]).getText()!="") {
+            y = Integer.parseInt(((TextField)settings[4]).getText()); 
+            y = coordinateSystem.getAbsoluteCoordinate(new int[]{0,y})[1];
+        } else {
+            y = dotP.getCoordinate()[1];
+        }
+        if(((TextField)settings[6]).getText()!="") {
+            radius = Integer.parseInt(((TextField)settings[6]).getText()); 
+        } else {
+            radius = dotP.getRadius();
+        }
+        if(((TextField)settings[8]).getText()!="") {
+            color = Color.web(((TextField)settings[8]).getText());
+        } else {
+            color = dotP.getColor();
+        }
+        dotP.setCoordinate(new int[]{x,y});
+        dotP.setColor(color);
+        //System.out.println("h ");
+        dotP.setRadius(radius);
+        //System.out.println("base color: " + dotP.getColor());
     }
 
     private void setSettings() {

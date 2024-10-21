@@ -39,23 +39,40 @@ public class FigureManager {
         }
     }
 
-    public void changeColor(Node node, Color color) {
+    // public void changeColor(Node node, Color color) {
+    //     Figure figure = searchFigure(node);
+    //     if(figure != null) {
+    //         figure.setColor(color);
+    //     }  
+    // }
+
+    public void setDefaultColor(Node node) {
         Figure figure = searchFigure(node);
         if(figure != null) {
-            figure.setColor(color);
+            figure.setColor(figure.getColor());
         }  
     }
 
     public void manageSettings(Node node) {
         openSettings(node);
         workingArea.getScene().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                //System.out.println("e ");
+                updateParamFigure(node);
+                closeSettings(node);
+                workingArea.getScene().setOnKeyPressed(null);
+            } 
             if (event.getCode() == KeyCode.ESCAPE) {
                 closeSettings(node);
+                setDefaultColor(node);
+                //System.out.println("f ");
                 workingArea.getScene().setOnKeyPressed(null);
             } 
         });
         workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             closeSettings(node);
+            setDefaultColor(node);
+            //System.out.println("g ");
             workingArea.getScene().setOnKeyPressed(null);
         });
     }
@@ -71,9 +88,15 @@ public class FigureManager {
         Figure figure = searchFigure(node);
         if(figure != null) {
             figureRender.deleteSettings(figure);
-            changeColor(node, Color.BLACK);
+            
         }
-        
+    }
+
+    public void updateParamFigure(Node node) {
+        Figure figure = searchFigure(node);
+        if(figure != null) {
+            figure.takeParamFromSettings();
+        }
     }
 
     public void changePosition(double deltaX, double deltaY) {

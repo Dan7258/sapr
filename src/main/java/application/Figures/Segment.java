@@ -9,6 +9,7 @@ import application.Primitives.LineP;
 import application.Primitives.Primitive;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
 public class Segment extends Figure {
@@ -105,6 +106,17 @@ public class Segment extends Figure {
     @Override
     public Control[] getSettings() {
         return null;
+    }
+
+
+
+
+    public void takeParamFromSettings() {
+        int x;
+        int y;
+        int radius; 
+        Color color;
+
     }
     
 }
