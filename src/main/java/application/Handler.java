@@ -62,12 +62,12 @@ public class Handler {
                 pause.play();
                 pause.setOnFinished(e -> {
                     if(event.getClickCount() == 2 ) {
-                        ((Shape)event.getTarget()).setFill(Color.GREEN);
+                        figureManager.changeColor((Node)event.getTarget(), Color.GREEN);
                         figureManager.manageSettings((Node)event.getTarget());
                     }
                     if(event.getClickCount() == 1 ) {
                         //System.out.println("a ");
-                        ((Shape)event.getTarget()).setFill(Color.BLUE);
+                        figureManager.changeColor((Node)event.getTarget(), Color.BLUE);
                         checkDeleteButton((Node)event.getTarget());
                     }
                 });  

@@ -9,6 +9,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Shape;
 
 
 public class FigureManager {
@@ -32,19 +35,26 @@ public class FigureManager {
                 figureRender.render(dot);
                 break;
             case SEGMENT:
-                Segment lineF = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK);
+                Segment lineF = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK, coordinateSystem);
                 listFigures.add(lineF);
                 figureRender.render(lineF);
                 break;
         }
     }
 
-    // public void changeColor(Node node, Color color) {
-    //     Figure figure = searchFigure(node);
-    //     if(figure != null) {
-    //         figure.setColor(color);
-    //     }  
-    // }
+    public void changeColor(Node node, Color color) {
+        Figure figure = searchFigure(node);
+        if(figure != null) {
+            for(Primitive primitive : figure.getLink()) {
+                if(primitive.getLink() instanceof Circle) {
+                    ((Circle)primitive.getLink()).setFill(color);
+                }
+                if(primitive.getLink() instanceof Line) {
+                    ((Line)primitive.getLink()).setStroke(color);
+                }
+            }
+        }  
+    }
 
     public void setDefaultColor(Node node) {
         Figure figure = searchFigure(node);
