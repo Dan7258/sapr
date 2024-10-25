@@ -35,7 +35,6 @@ public class Segment extends Figure {
         dotP2 = new DotP(x2, y2, radius, color);
         lineP = new LineP(x1, y1, x2, y2, width, color);
         this.coordinateSystem = coordinateSystem;
-        setSettings();
         lineStyles.put("──────" , FXCollections.observableArrayList());
         lineStyles.put("─ ─ ─ ─ ─" ,FXCollections.observableArrayList(10.0, 10.0));
         lineStyles.put("─·─·─·─·─" ,  FXCollections.observableArrayList(15.0, 10.0, 1.0, 8.0));
@@ -122,7 +121,8 @@ public class Segment extends Figure {
         return settings;
     }
 
-    private void setSettings() {
+    @Override
+    public void setSettings() {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.getItems().addAll(
             "──────",
@@ -157,6 +157,8 @@ public class Segment extends Figure {
             new TextField(getColor().toString()),
             new Label("Тип линии: "), 
             comboBox,
+            new Label("толщина линии: "), 
+            new TextField(Double.toString(getWidth())),
         };
     }
 
@@ -168,6 +170,7 @@ public class Segment extends Figure {
         int y2;
         int radius; 
         Color color;
+        double width;
                    
         if(((TextField)settings[2]).getText()!="") {
             x1 = Integer.parseInt(((TextField)settings[2]).getText()); 
@@ -194,7 +197,7 @@ public class Segment extends Figure {
             y2 = dotP2.getCoordinate()[1];
         }
         if(((TextField)settings[10]).getText()!="") {
-            radius = Integer.parseInt(((TextField)settings[10]).getText()); 
+            radius = Integer.parseInt(((TextField)settings[10]).getText()) > 0 ? Integer.parseInt(((TextField)settings[10]).getText()) : 1; 
         } else {
             radius = dotP1.getRadius();
         }
@@ -203,16 +206,37 @@ public class Segment extends Figure {
         } else {
             color = dotP1.getColor();
         }
-
-        dotP1.setCoordinate(new int[]{x1,y1});
-        dotP2.setCoordinate(new int[]{x2,y2});
-        lineP.setCoordinate(new int[]{x1,y1,x2,y2});
         ((Line)lineP.getLink()).getStrokeDashArray().setAll(lineStyles.get(((ComboBox)settings[14]).getValue()));
-        dotP1.setColor(color);
-        dotP2.setColor(color);
-        lineP.setColor(color);
+        if(((TextField)settings[16]).getText()!="") {
+            width = Double.parseDouble(((TextField)settings[16]).getText()) > 0 ? Double.parseDouble(((TextField)settings[16]).getText()) : 1; 
+        } else {
+            width = getWidth();
+        }
+
+        setCoordinate(new int[]{x1,y1,x2,y2});
+        setColor(color);
+        setRadius(radius);
+        setWidth(width);
         
-        dotP1.setRadius(radius);
-        dotP2.setRadius(radius);
+    }
+    public void zoom(double scaleFactor) {
+        int[] coordinates = getCoordinate();
+        int x1 = coordinates[0];
+        int y1 = coordinates[1];
+        int x2 = coordinates[2];
+        int y2 = coordinates[3];
+
+        // Вычисляем центр линии
+        double centerX = (x1 + x2) / 2.0;
+        double centerY = (y1 + y2) / 2.0;
+
+        // Вычисляем новые координаты с учетом коэффициента масштабирования
+        int newX1 = (int) ((x1 - centerX) * scaleFactor + centerX);
+        int newY1 = (int) ((y1 - centerY) * scaleFactor + centerY);
+        int newX2 = (int) ((x2 - centerX) * scaleFactor + centerX);
+        int newY2 = (int) ((y2 - centerY) * scaleFactor + centerY);
+
+        // Устанавливаем новые координаты
+        setCoordinate(new int[]{newX1, newY1, newX2, newY2});
     }
 }

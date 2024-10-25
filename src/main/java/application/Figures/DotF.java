@@ -22,7 +22,6 @@ public class DotF extends Figure{
     public DotF(int x, int y, int radius, Color color, CoordinateSystem coordinateSystem) {
         dotP = new DotP(x, y, radius, color);
         this.coordinateSystem = coordinateSystem;
-        setSettings();
     }
 
     @Override
@@ -121,7 +120,8 @@ public class DotF extends Figure{
         //System.out.println("base color: " + dotP.getColor());
     }
 
-    private void setSettings() {
+    @Override
+    public void setSettings() {
         settings = new Control[]
         {
             new Label("Координаты: "), 

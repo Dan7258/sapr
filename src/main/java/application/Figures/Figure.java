@@ -18,6 +18,7 @@ public abstract class Figure {
     public abstract ArrayList<Primitive> getLink();
     public abstract void updatePosition();
     public abstract Figures getType();
+    public abstract void setSettings();
     public abstract Control[] getSettings();
     public abstract void takeParamFromSettings();
 }

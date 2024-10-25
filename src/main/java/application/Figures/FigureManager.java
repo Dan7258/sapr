@@ -90,6 +90,7 @@ public class FigureManager {
     public void openSettings(Node node) {
         Figure figure = searchFigure(node);
         if(figure != null) {
+            figure.setSettings();
             figureRender.renderSettings(figure);
         }
          
@@ -98,8 +99,8 @@ public class FigureManager {
         Figure figure = searchFigure(node);
         if(figure != null) {
             figureRender.deleteSettings(figure);
-            
         }
+
     }
 
     public void updateParamFigure(Node node) {
