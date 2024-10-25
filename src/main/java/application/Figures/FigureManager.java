@@ -38,9 +38,14 @@ public class FigureManager {
                 figureRender.render(dot);
                 break;
             case SEGMENT:
-                Segment lineF = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK, coordinateSystem);
-                listFigures.add(lineF);
-                figureRender.render(lineF);
+                Segment segment = new Segment(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK, coordinateSystem);
+                listFigures.add(segment);
+                figureRender.render(segment);
+                break;
+            case RECTANGLE:
+                Rectangle rectangle = new Rectangle(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK, coordinateSystem);
+                listFigures.add(rectangle);
+                figureRender.render(rectangle);
                 break;
         }
     }

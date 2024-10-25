@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 
@@ -48,7 +47,10 @@ public class Handler {
                         btnDotIsPressed((Button)node);
                         break;
                         case "btnLine":
-                        btnLineIsPressed((Button)node);
+                        createByTwoPoints((Button)node, Figures.SEGMENT);
+                        break;
+                        case "btnRectangle":
+                        createByTwoPoints((Button)node, Figures.RECTANGLE);
                         break;
                     }
                 }
@@ -128,6 +130,9 @@ public class Handler {
             case "btnLine":
             button.setText("Линия");
             break;
+            case "btnRectangle":
+            button.setText("Прямоугольник");
+            break;
         }
         createMode = false;
         form.deleteFormCoord();
@@ -162,18 +167,18 @@ public class Handler {
     }
     
 
-    private void btnLineIsPressed(Button button) {
+    private void createByTwoPoints(Button button, Figures type) {
         createModeDisable(chooseButton);
         createModeEnable(button);
         double[] coord = new double[4];
         AtomicInteger i = new AtomicInteger(0);
-        handleCoordinateInput(button, coord, i);
+        handleCoordinateInput(button, coord, i, type);
     }
     
-    private void handleCoordinateInput(Button button, double[] coord, AtomicInteger i) {
+    private void handleCoordinateInput(Button button, double[] coord, AtomicInteger i, Figures type) {
         if (i.get() >= 4) {
             if (createMode) {
-                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.SEGMENT);
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), type);
                 i.set(0);
             }
         }
@@ -189,7 +194,7 @@ public class Handler {
                 coord[i.get()] = coordm[0];
                 coord[i.get() + 1] = coordm[1];
                 i.addAndGet(2);
-                handleCoordinateInput(button, coord, i); 
+                handleCoordinateInput(button, coord, i, type); 
             }
             if (event.getButton() == MouseButton.SECONDARY) {
                 createModeDisable(button);
@@ -202,7 +207,7 @@ public class Handler {
                 double[] data = form.getDataFromForm();
                 parseData(coord, data, i);
                 i.addAndGet(2);
-                handleCoordinateInput(button, coord, i);                 
+                handleCoordinateInput(button, coord, i, type);                 
             }
         });
     }
