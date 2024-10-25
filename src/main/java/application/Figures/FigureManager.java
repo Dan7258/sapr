@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Shape;
 
 
 public class FigureManager {
@@ -27,7 +26,11 @@ public class FigureManager {
         this.coordinateSystem = coordinateSystem;
     }
 
-    public void createFigure(int[] coord, Figures type) {
+    public ArrayList<Figure> getListFigures() {
+        return listFigures;
+    }
+
+    public void createFigure(double[] coord, Figures type) {
         switch (type) {
             case DOTF:
                 DotF dot = new DotF(coord[0], coord[1], 6, Color.BLACK, coordinateSystem);

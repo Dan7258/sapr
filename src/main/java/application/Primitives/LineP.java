@@ -7,16 +7,16 @@ import javafx.scene.shape.Line;
 
 public class LineP extends Primitive {
 
-    private int x1;
-    private int y1;
-    private int x2;
-    private int y2;
+    private double x1;
+    private double y1;
+    private double x2;
+    private double y2;
     private Color color;
     private double width;
     private Line line;
     private Primitives type = Primitives.LINE;
     
-    public LineP(int x1, int y1,int x2, int y2, double width, Color color) {
+    public LineP(double x1, double y1,double x2, double y2, double width, Color color) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -28,13 +28,13 @@ public class LineP extends Primitive {
     }
 
     @Override
-    public int[] getCoordinate() {
-        int[] coordinates = {x1, y1, x2, y2};
+    public double[] getCoordinate() {
+        double[] coordinates = {x1, y1, x2, y2};
         return coordinates;
     }
 
     @Override
-    public void setCoordinate(int[] newCoordinates) {
+    public void setCoordinate(double[] newCoordinates) {
         this.x1 = newCoordinates[0];
         this.y1 = newCoordinates[1];
         this.x2 = newCoordinates[2];
@@ -55,10 +55,10 @@ public class LineP extends Primitive {
 
     @Override
     public void updatePosition() {
-        this.x1 = (int)line.getStartX();
-        this.y1 = (int)line.getStartY();
-        this.x2 = (int)line.getEndX();
-        this.y2 = (int)line.getEndY();
+        this.x1 = (double)line.getStartX();
+        this.y1 = (double)line.getStartY();
+        this.x2 = (double)line.getEndX();
+        this.y2 = (double)line.getEndY();
     }
 
     @Override

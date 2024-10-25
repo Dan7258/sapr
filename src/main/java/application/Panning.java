@@ -13,8 +13,8 @@ public class Panning {
     private FigureManager figureManager;
     private CoordinateSystem coordinateSystem;
 
-    private int oldMouseCoordX;
-    private int oldMouseCoordY;
+    private double oldMouseCoordX;
+    private double oldMouseCoordY;
 
     public Panning(AnchorPane workingArea, FigureManager figureManager, CoordinateSystem coordinateSystem) {
         this.workingArea = workingArea;
@@ -25,8 +25,8 @@ public class Panning {
 
     private void enablePanning() {
         workingArea.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
-            oldMouseCoordX = (int)event.getX();
-            oldMouseCoordY = (int)event.getY();
+            oldMouseCoordX = (double)event.getX();
+            oldMouseCoordY = (double)event.getY();
             coordinateSystem.updatePosition();
             figureManager.updatePosition();
             

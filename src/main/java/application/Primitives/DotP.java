@@ -6,14 +6,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class DotP extends Primitive{
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private int radius;
     private Color color;
     private Circle circle;
     private Primitives type = Primitives.DOT;
     
-    public DotP(int x, int y, int radius, Color color) {
+    public DotP(double x, double y, int radius, Color color) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -22,13 +22,13 @@ public class DotP extends Primitive{
     }
 
     @Override
-    public int[] getCoordinate() {
-        int[] coordinates = {x, y};
+    public double[] getCoordinate() {
+        double[] coordinates = {x, y};
         return coordinates;
     }
 
     @Override
-    public void setCoordinate(int[] newCoordinates) {
+    public void setCoordinate(double[] newCoordinates) {
         this.x = newCoordinates[0];
         this.y = newCoordinates[1];
         circle.setCenterX(newCoordinates[0]);
@@ -43,8 +43,8 @@ public class DotP extends Primitive{
 
     @Override
     public void updatePosition() {
-        this.x = (int)circle.getCenterX();
-        this.y = (int)circle.getCenterY();
+        this.x = (double)circle.getCenterX();
+        this.y = (double)circle.getCenterY();
     }
 
     @Override

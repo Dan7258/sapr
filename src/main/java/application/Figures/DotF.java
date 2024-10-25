@@ -19,18 +19,18 @@ public class DotF extends Figure{
     private Figures type = Figures.DOTF;
     private Control[] settings;
     
-    public DotF(int x, int y, int radius, Color color, CoordinateSystem coordinateSystem) {
+    public DotF(double x, double y, int radius, Color color, CoordinateSystem coordinateSystem) {
         dotP = new DotP(x, y, radius, color);
         this.coordinateSystem = coordinateSystem;
     }
 
     @Override
-    public int[] getCoordinate() {
+    public double[] getCoordinate() {
         return dotP.getCoordinate();
     }
 
     @Override
-    public void setCoordinate(int[] newCoordinates) {
+    public void setCoordinate(double[] newCoordinates) {
         dotP.setCoordinate(newCoordinates);
     }
 
@@ -86,20 +86,20 @@ public class DotF extends Figure{
 
     @Override
     public void takeParamFromSettings() {
-        int x;
-        int y;
+        double x;
+        double y;
         int radius; 
         Color color;
 
         if(((TextField)settings[2]).getText()!="") {
             x = Integer.parseInt(((TextField)settings[2]).getText()); 
-            x = coordinateSystem.getAbsoluteCoordinate(new int[]{x,0})[0];
+            x = coordinateSystem.getAbsoluteCoordinate(new double[]{x,0})[0];
         } else {
             x = dotP.getCoordinate()[0];
         }
         if(((TextField)settings[4]).getText()!="") {
             y = Integer.parseInt(((TextField)settings[4]).getText()); 
-            y = coordinateSystem.getAbsoluteCoordinate(new int[]{0,y})[1];
+            y = coordinateSystem.getAbsoluteCoordinate(new double[]{0,y})[1];
         } else {
             y = dotP.getCoordinate()[1];
         }
@@ -113,7 +113,7 @@ public class DotF extends Figure{
         } else {
             color = dotP.getColor();
         }
-        dotP.setCoordinate(new int[]{x,y});
+        dotP.setCoordinate(new double[]{x,y});
         dotP.setColor(color);
         //System.out.println("h ");
         dotP.setRadius(radius);
@@ -126,9 +126,9 @@ public class DotF extends Figure{
         {
             new Label("Координаты: "), 
             new Label("X: "), 
-            new TextField(Integer.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[0])),
             new Label("Y: "), 
-            new TextField(Integer.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[1])),
             new Label("Радиус: "), 
             new TextField(Integer.toString(getRadius())),
             new Label("Цвет: "), 

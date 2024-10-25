@@ -96,32 +96,32 @@ public class Form {
         
     }
 
-    public int[] getDataFromForm() {
-        int x = 0;
-        int y = 0;
-        int length = 0;
+    public double[] getDataFromForm() {
+        double x = 0;
+        double y = 0;
+        double length = 0;
         int angle = 0;
         if(textFieldX.getText()!="") {
-            x = Integer.parseInt(textFieldX.getText()); 
+            x = Double.parseDouble(textFieldX.getText()); 
         } else {
-            x = Integer.parseInt(textFieldX.getPromptText().split(" ")[1]); 
+            x = Double.parseDouble(textFieldX.getPromptText().split(" ")[1]); 
         }
         if(textFieldY.getText()!="") {
-            y = Integer.parseInt(textFieldY.getText());
+            y = Double.parseDouble(textFieldY.getText());
         } else {
-            y = Integer.parseInt(textFieldY.getPromptText().split(" ")[1]);
+            y = Double.parseDouble(textFieldY.getPromptText().split(" ")[1]);
         }
         if(textFieldLength != null && textFieldLength.getText()!="") {
-            length = Integer.parseInt(textFieldLength.getText()); 
+            length = Double.parseDouble(textFieldLength.getText()); 
         } else if(textFieldLength != null && textFieldLength.getText()==""){
-            length = Integer.parseInt(textFieldLength.getPromptText().split(" ")[1]); 
+            length = Double.parseDouble(textFieldLength.getPromptText().split(" ")[1]); 
         }
         if(textFieldAngle != null && textFieldAngle.getText()!="") {
             angle = Integer.parseInt(textFieldAngle.getText()); 
         } else if(textFieldAngle != null && textFieldAngle.getText()==""){
             angle = Integer.parseInt(textFieldAngle.getPromptText().split(" ")[1]); 
         }
-        return new int[] {x, y, length, angle};
+        return new double[] {x, y, length, angle};
     }
 
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
@@ -30,7 +29,7 @@ public class Segment extends Figure {
     private Control[] settings;
     private Map<String, ObservableList<Double>> lineStyles = new HashMap<>(); 
   
-    public Segment(int x1, int y1,int x2, int y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
+    public Segment(double x1, double y1,double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
         dotP1 = new DotP(x1, y1, radius, color);
         dotP2 = new DotP(x2, y2, radius, color);
         lineP = new LineP(x1, y1, x2, y2, width, color);
@@ -41,12 +40,12 @@ public class Segment extends Figure {
     }
 
     @Override
-    public int[] getCoordinate() {
+    public double[] getCoordinate() {
         return lineP.getCoordinate();
     }
 
     @Override
-    public void setCoordinate(int[] newCoordinates) {
+    public void setCoordinate(double[] newCoordinates) {
         dotP1.setCoordinate(Arrays.copyOfRange(newCoordinates, 0, 2));
         dotP2.setCoordinate(Arrays.copyOfRange(newCoordinates, 2, 4));
         lineP.setCoordinate(newCoordinates);
@@ -144,13 +143,13 @@ public class Segment extends Figure {
         {
             new Label("Координаты: "), 
             new Label("X1: "), 
-            new TextField(Integer.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[0])),
             new Label("Y1: "), 
-            new TextField(Integer.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[1])),
             new Label("X2: "), 
-            new TextField(Integer.toString(coordinateSystem.getRelativeCoordinate(dotP2.getCoordinate()[0], dotP2.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP2.getCoordinate()[0], dotP2.getCoordinate()[1])[0])),
             new Label("Y2: "), 
-            new TextField(Integer.toString(coordinateSystem.getRelativeCoordinate(dotP2.getCoordinate()[0], dotP2.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP2.getCoordinate()[0], dotP2.getCoordinate()[1])[1])),
             new Label("Радиус: "), 
             new TextField(Integer.toString(getRadius())),
             new Label("Цвет: "), 
@@ -164,35 +163,35 @@ public class Segment extends Figure {
 
     @Override
     public void takeParamFromSettings() {
-        int x1;
-        int y1;
-        int x2;
-        int y2;
+        double x1;
+        double y1;
+        double x2;
+        double y2;
         int radius; 
         Color color;
         double width;
                    
         if(((TextField)settings[2]).getText()!="") {
-            x1 = Integer.parseInt(((TextField)settings[2]).getText()); 
-            x1 = coordinateSystem.getAbsoluteCoordinate(new int[]{x1,0})[0];
+            x1 = Double.parseDouble(((TextField)settings[2]).getText()); 
+            x1 = coordinateSystem.getAbsoluteCoordinate(new double[]{x1,0})[0];
         } else {
             x1 = dotP1.getCoordinate()[0];
         }
         if(((TextField)settings[4]).getText()!="") {
-            y1 = Integer.parseInt(((TextField)settings[4]).getText()); 
-            y1 = coordinateSystem.getAbsoluteCoordinate(new int[]{0,y1})[1];
+            y1 = Double.parseDouble(((TextField)settings[4]).getText()); 
+            y1 = coordinateSystem.getAbsoluteCoordinate(new double[]{0,y1})[1];
         } else {
             y1 = dotP1.getCoordinate()[1];
         }
         if(((TextField)settings[6]).getText()!="") {
-            x2 = Integer.parseInt(((TextField)settings[6]).getText()); 
-            x2 = coordinateSystem.getAbsoluteCoordinate(new int[]{x2,0})[0];
+            x2 = Double.parseDouble(((TextField)settings[6]).getText()); 
+            x2 = coordinateSystem.getAbsoluteCoordinate(new double[]{x2,0})[0];
         } else {
             x2 = dotP2.getCoordinate()[0];
         }
         if(((TextField)settings[8]).getText()!="") {
-            y2 = Integer.parseInt(((TextField)settings[8]).getText()); 
-            y2 = coordinateSystem.getAbsoluteCoordinate(new int[]{0,y2})[1];
+            y2 = Double.parseDouble(((TextField)settings[8]).getText()); 
+            y2 = coordinateSystem.getAbsoluteCoordinate(new double[]{0,y2})[1];
         } else {
             y2 = dotP2.getCoordinate()[1];
         }
@@ -213,30 +212,11 @@ public class Segment extends Figure {
             width = getWidth();
         }
 
-        setCoordinate(new int[]{x1,y1,x2,y2});
+        setCoordinate(new double[]{x1,y1,x2,y2});
         setColor(color);
         setRadius(radius);
         setWidth(width);
         
     }
-    public void zoom(double scaleFactor) {
-        int[] coordinates = getCoordinate();
-        int x1 = coordinates[0];
-        int y1 = coordinates[1];
-        int x2 = coordinates[2];
-        int y2 = coordinates[3];
-
-        // Вычисляем центр линии
-        double centerX = (x1 + x2) / 2.0;
-        double centerY = (y1 + y2) / 2.0;
-
-        // Вычисляем новые координаты с учетом коэффициента масштабирования
-        int newX1 = (int) ((x1 - centerX) * scaleFactor + centerX);
-        int newY1 = (int) ((y1 - centerY) * scaleFactor + centerY);
-        int newX2 = (int) ((x2 - centerX) * scaleFactor + centerX);
-        int newY2 = (int) ((y2 - centerY) * scaleFactor + centerY);
-
-        // Устанавливаем новые координаты
-        setCoordinate(new int[]{newX1, newY1, newX2, newY2});
-    }
+    
 }

@@ -140,8 +140,8 @@ public class Handler {
         form.createFormCoord("0", "0", "Введите координаты: ");
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                int[] coord = new int[2];
-                coord = coordinateSystem.getRelativeCoordinate((int)event.getX(), (int)event.getY());
+                double[] coord = new double[2];
+                coord = coordinateSystem.getRelativeCoordinate((double)event.getX(), (double)event.getY());
                 figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.DOTF);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
@@ -153,7 +153,7 @@ public class Handler {
         
         workingArea.getScene().setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
-                int[] coordinates = form.getDataFromForm();
+                double[] coordinates = form.getDataFromForm();
                 figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coordinates), Figures.DOTF);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
@@ -165,12 +165,12 @@ public class Handler {
     private void btnLineIsPressed(Button button) {
         createModeDisable(chooseButton);
         createModeEnable(button);
-        int[] coord = new int[4];
+        double[] coord = new double[4];
         AtomicInteger i = new AtomicInteger(0);
         handleCoordinateInput(button, coord, i);
     }
     
-    private void handleCoordinateInput(Button button, int[] coord, AtomicInteger i) {
+    private void handleCoordinateInput(Button button, double[] coord, AtomicInteger i) {
         if (i.get() >= 4) {
             if (createMode) {
                 figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.SEGMENT);
@@ -185,7 +185,7 @@ public class Handler {
         }
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                int[] coordm = choiceCoordinate(event);                
+                double[] coordm = choiceCoordinate(event);                
                 coord[i.get()] = coordm[0];
                 coord[i.get() + 1] = coordm[1];
                 i.addAndGet(2);
@@ -199,7 +199,7 @@ public class Handler {
         });
         workingArea.getScene().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                int[] data = form.getDataFromForm();
+                double[] data = form.getDataFromForm();
                 parseData(coord, data, i);
                 i.addAndGet(2);
                 handleCoordinateInput(button, coord, i);                 
@@ -207,30 +207,30 @@ public class Handler {
         });
     }
 
-    private int[] choiceCoordinate(MouseEvent event) {
-        int[] coordm = new int[2];
+    private double[] choiceCoordinate(MouseEvent event) {
+        double[] coordm = new double[2];
         if(event.getTarget() instanceof Circle) {
             Circle circle = (Circle)event.getTarget();
-            coordm = coordinateSystem.getRelativeCoordinate((int)circle.getCenterX(), (int)circle.getCenterY());
+            coordm = coordinateSystem.getRelativeCoordinate((double)circle.getCenterX(), (double)circle.getCenterY());
         } else {
-            coordm = coordinateSystem.getRelativeCoordinate((int)event.getX(), (int)event.getY());
+            coordm = coordinateSystem.getRelativeCoordinate((double)event.getX(), (double)event.getY());
         }
         return coordm;
     }
 
-    private void parseData(int[] coord, int[] data, AtomicInteger i) {
+    private void parseData(double[] coord, double[] data, AtomicInteger i) {
         if(data[2] == 0 && data[3] == 0) {
             coord[i.get()] = data[0];
             coord[i.get() + 1] = data[1];
         } else {
             if(i.get()==0) {
-                int x = 0 + (int)(Math.cos(data[3] * Math.PI / 180) * data[2]);
-                int y = 0 + (int)(Math.sin(data[3] * Math.PI / 180) * data[2]);
+                double x = 0 + (double)(Math.cos(data[3] * Math.PI / 180) * data[2]);
+                double y = 0 + (double)(Math.sin(data[3] * Math.PI / 180) * data[2]);
                 coord[i.get()] = x;
                 coord[i.get() + 1] = y;
             } else {
-                int x = coord[0] + (int)(Math.cos(data[3] * Math.PI / 180) * data[2]);
-                int y = coord[1] + (int)(Math.sin(data[3] * Math.PI / 180) * data[2]);
+                double x = coord[0] + (double)(Math.cos(data[3] * Math.PI / 180) * data[2]);
+                double y = coord[1] + (double)(Math.sin(data[3] * Math.PI / 180) * data[2]);
                 coord[i.get()] = x;
                 coord[i.get() + 1] = y;
             }

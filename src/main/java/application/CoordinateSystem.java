@@ -1,7 +1,6 @@
 package application;
 
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 
@@ -10,8 +9,8 @@ public class CoordinateSystem {
 
     private Line xAxis;
     private Line yAxis;
-    private int[] xAxisPosition = new int[4];
-    private int[] yAxisPosition = new int[4];
+    private double[] xAxisPosition = new double[4];
+    private double[] yAxisPosition = new double[4];
     private AnchorPane workingArea;
     private Label mouseCoordinates;
     private Label mouseCoordinates1;
@@ -29,13 +28,13 @@ public class CoordinateSystem {
     private void createAxes() {
         xAxisPosition[0] = 0;
         xAxisPosition[1] = 850;
-        xAxisPosition[2] = (int)workingArea.getPrefWidth();;
+        xAxisPosition[2] = (double)workingArea.getPrefWidth();;
         xAxisPosition[3] = 850;
 
         yAxisPosition[0] = 50;
         yAxisPosition[1] = 0;
         yAxisPosition[2] = 50;
-        yAxisPosition[3] = (int)workingArea.getPrefHeight();
+        yAxisPosition[3] = (double)workingArea.getPrefHeight();
 
 
         xAxis = new Line(xAxisPosition[0], xAxisPosition[1], xAxisPosition[2], xAxisPosition[3]);
@@ -48,22 +47,22 @@ public class CoordinateSystem {
 
     private void showMouseCoordinates() {
         workingArea.setOnMouseMoved(e-> {
-            int x = (int)e.getX();
-            int y = (int)e.getY();
-            int angle = (int)(180 * Math.atan2(-y + (int)(xAxis.getEndY()), x - (int)(yAxis.getEndX())) / Math.PI);
-            int length = (int)Math.sqrt(Math.pow(x - (int)(yAxis.getEndX()), 2) + Math.pow(y - (int)(xAxis.getEndY()), 2));
-            mouseCoordinates1.setText(String.format("length: %d, ∠°: %d", length , angle )); 
-            mouseCoordinates.setText(String.format("X: %d, Y: %d", x - (int)(yAxis.getEndX()) , -y + (int)(xAxis.getEndY())));
+            double x = e.getX();
+            double y = e.getY();
+            int angle = (int)(180 * Math.atan2(-y + (xAxis.getEndY()), x - (yAxis.getEndX())) / Math.PI);
+            double length = (double)Math.sqrt(Math.pow(x - (double)(yAxis.getEndX()), 2) + Math.pow(y - (double)(xAxis.getEndY()), 2));
+            mouseCoordinates1.setText(String.format("length: %.2f, ∠°: %d", length , angle )); 
+            mouseCoordinates.setText(String.format("X: %.2f, Y: %.2f", x - yAxis.getEndX() , -y + xAxis.getEndY()));
            
             
         });
     } 
 
-    public int[] getRelativeCoordinate(int x, int y) {
-        return new int[]{x - yAxisPosition[2],-y + xAxisPosition[3]};
+    public double[] getRelativeCoordinate(double x, double y) {
+        return new double[]{x - yAxisPosition[2],-y + xAxisPosition[3]};
     }
 
-    public int[] getAbsoluteCoordinate(int[] coord) {
+    public double[] getAbsoluteCoordinate(double[] coord) {
         for(int i = 0; i < coord.length;i+=2) {
             coord[i] = coord[i] + yAxisPosition[0];
             coord[i+1] = -coord[i+1] + xAxisPosition[1];
@@ -73,13 +72,13 @@ public class CoordinateSystem {
 
 
     public void updatePosition() {
-        xAxisPosition[1] = (int)xAxis.getStartY();
-        xAxisPosition[2] = (int)xAxis.getEndX();
-        xAxisPosition[3] = (int)xAxis.getEndY();
+        xAxisPosition[1] = (double)xAxis.getStartY();
+        xAxisPosition[2] = (double)xAxis.getEndX();
+        xAxisPosition[3] = (double)xAxis.getEndY();
 
-        yAxisPosition[0] = (int)yAxis.getStartX();
-        yAxisPosition[2] = (int)yAxis.getEndX();
-        yAxisPosition[3] = (int)yAxis.getEndY();
+        yAxisPosition[0] = (double)yAxis.getStartX();
+        yAxisPosition[2] = (double)yAxis.getEndX();
+        yAxisPosition[3] = (double)yAxis.getEndY();
     }
 
     public void setPosition(double deltaX, double deltaY) {
@@ -90,10 +89,10 @@ public class CoordinateSystem {
         yAxis.setEndX(yAxisPosition[2] + deltaX);
     }
 
-    public int[] getXAxisPosition() {
+    public double[] getXAxisPosition() {
         return xAxisPosition;
     }
-    public int[] getYAxisPosition() {
+    public double[] getYAxisPosition() {
         return yAxisPosition;
     }
 }
