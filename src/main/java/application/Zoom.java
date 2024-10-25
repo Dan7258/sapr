@@ -27,21 +27,25 @@ public class Zoom {
     }
 
     public void zoomEnable(double scaleFactor, double mouseX, double mouseY) {
+        if((coordinateSystem.getScale() > 5 && scaleFactor != 0.9) || (coordinateSystem.getScale() < 0.03 && scaleFactor != 1.1)) {
+            return;
+        }
+        coordinateSystem.updateScale(coordinateSystem.getScale()*scaleFactor);
+        double[] axesCoordinates = coordinateSystem.getCoordinate();
+        double[] newAxesCoordinates = new double[axesCoordinates.length];
+        for(int i = 0; i < axesCoordinates.length; i+=2) {
+            newAxesCoordinates[i] = (axesCoordinates[i] - mouseX) * scaleFactor + mouseX;
+            newAxesCoordinates[i+1] = (axesCoordinates[i+1] - mouseY) * scaleFactor + mouseY;
+        }
+        coordinateSystem.setCoordinate(newAxesCoordinates);
         for(Figure figure : figureManager.getListFigures()) {
             double[] coordinates = figure.getCoordinate();
-            double x1 = coordinates[0];
-            double y1 = coordinates[1];
-            double x2 = coordinates[2];
-            double y2 = coordinates[3];
-    
-            // Вычисляем новые координаты с учетом коэффициента масштабирования
-            double newX1 = (double) ((x1 - mouseX) * scaleFactor + mouseX);
-            double newY1 = (double) ((y1 - mouseY) * scaleFactor + mouseY);
-            double newX2 = (double) ((x2 - mouseX) * scaleFactor + mouseX);
-            double newY2 = (double) ((y2 - mouseY) * scaleFactor + mouseY);
-    
-            // Устанавливаем новые координаты
-            figure.setCoordinate(new double[]{newX1, newY1, newX2, newY2});
+            double[] newCoordinates = new double[coordinates.length];
+            for(int i = 0; i < coordinates.length; i+=2) {
+                newCoordinates[i] = (coordinates[i] - mouseX) * scaleFactor + mouseX;
+                newCoordinates[i+1] = (coordinates[i+1] - mouseY) * scaleFactor + mouseY;
+            }
+            figure.setCoordinate(newCoordinates);
         }
     }
     

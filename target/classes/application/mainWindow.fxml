@@ -90,6 +90,7 @@
         <items>
           <AnchorPane fx:id="settingArea" minHeight="0.0" minWidth="0.0" prefHeight="968.0" prefWidth="170.0">
                <children>
+                  <Label fx:id="scale" layoutX="228.0" layoutY="824.0" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="25.0" />
                   <Label fx:id="mouseCoordinates1" layoutX="168.0" layoutY="854.0" AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="25.0" />
                   <Label fx:id="mouseCoordinates" layoutX="144.0" layoutY="826.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="25.0" />
                </children>
