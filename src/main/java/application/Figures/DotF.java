@@ -64,7 +64,7 @@ public class DotF extends Figure{
     }
 
     public int getRadius() {
-        return dotP.getRadius();
+        return (int)dotP.getRadius();
     }
     
     @Override
@@ -92,13 +92,13 @@ public class DotF extends Figure{
         Color color;
 
         if(((TextField)settings[2]).getText()!="") {
-            x = Integer.parseInt(((TextField)settings[2]).getText()); 
+            x = Double.parseDouble(((TextField)settings[2]).getText()); 
             x = coordinateSystem.getAbsoluteCoordinate(new double[]{x,0})[0];
         } else {
             x = dotP.getCoordinate()[0];
         }
         if(((TextField)settings[4]).getText()!="") {
-            y = Integer.parseInt(((TextField)settings[4]).getText()); 
+            y = Double.parseDouble(((TextField)settings[4]).getText()); 
             y = coordinateSystem.getAbsoluteCoordinate(new double[]{0,y})[1];
         } else {
             y = dotP.getCoordinate()[1];
@@ -106,17 +106,17 @@ public class DotF extends Figure{
         if(((TextField)settings[6]).getText()!="") {
             radius = Integer.parseInt(((TextField)settings[6]).getText()); 
         } else {
-            radius = dotP.getRadius();
+            radius = (int)dotP.getRadius();
         }
         if(((TextField)settings[8]).getText()!="") {
             color = Color.web(((TextField)settings[8]).getText());
         } else {
             color = dotP.getColor();
         }
-        dotP.setCoordinate(new double[]{x,y});
-        dotP.setColor(color);
+        setCoordinate(new double[]{x,y});
+        setColor(color);
         //System.out.println("h ");
-        dotP.setRadius(radius);
+        setRadius(radius);
         //System.out.println("base color: " + dotP.getColor());
     }
 

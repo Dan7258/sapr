@@ -62,7 +62,7 @@ public class Form {
 
     public void createTextFieldPolar(String length, String angle) {
         textFieldLength = new TextField();
-        textFieldLength.setPromptText("length: " + length);
+        textFieldLength.setPromptText("length(radius): " + length);
         textFieldLength.setLayoutX(20);
         textFieldLength.setLayoutY(110);
         textFieldLength.setPrefWidth(100);

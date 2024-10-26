@@ -5,7 +5,10 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+
 import java.util.ArrayList;
+
+import application.Figures.FigureEnum.Figures;
 import application.Primitives.Primitive;
 
 public class FigureRender {
@@ -19,6 +22,11 @@ public class FigureRender {
     }
     public void render(Figure figure) {
         ArrayList<Primitive> primitives = figure.getLink();
+        if(figure.getType() == Figures.RING) {
+            workingArea.getChildren().add(figure.getLink().get(0).getLink());
+            workingArea.getChildren().add(0, figure.getLink().get(1).getLink());
+            return;
+        }
         for(Primitive primitive : primitives) {
             workingArea.getChildren().add(primitive.getLink());
         }

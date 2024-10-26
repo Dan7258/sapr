@@ -6,6 +6,7 @@ import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -47,12 +48,22 @@ public class FigureManager {
                 listFigures.add(rectangle);
                 figureRender.render(rectangle);
                 break;
+            case RING:
+                Ring ring = new Ring(coord[0], coord[1], coord[2], coord[3], 6, 2, Color.BLACK, coordinateSystem);
+                listFigures.add(ring);
+                figureRender.render(ring);
+                break;
         }
     }
 
     public void changeColor(Node node, Color color) {
         Figure figure = searchFigure(node);
         if(figure != null) {
+            if(figure.getType() == Figures.RING) {
+                ((Circle)(figure.getLink().get(0).getLink())).setFill(color);
+                ((Circle)(figure.getLink().get(1).getLink())).setStroke(color);
+                return;
+            }
             for(Primitive primitive : figure.getLink()) {
                 if(primitive.getLink() instanceof Circle) {
                     ((Circle)primitive.getLink()).setFill(color);
@@ -75,7 +86,6 @@ public class FigureManager {
         openSettings(node);
         workingArea.getScene().setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                //System.out.println("e ");
                 updateParamFigure(node);
                 closeSettings(node);
                 workingArea.getScene().setOnKeyPressed(null);
@@ -83,15 +93,15 @@ public class FigureManager {
             if (event.getCode() == KeyCode.ESCAPE) {
                 closeSettings(node);
                 setDefaultColor(node);
-                //System.out.println("f ");
                 workingArea.getScene().setOnKeyPressed(null);
             } 
         });
         workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            closeSettings(node);
-            setDefaultColor(node);
-            //System.out.println("g ");
-            workingArea.getScene().setOnKeyPressed(null);
+            if(event.getButton() != MouseButton.MIDDLE) {
+                closeSettings(node);
+                setDefaultColor(node);
+                workingArea.getScene().setOnKeyPressed(null);
+            }
         });
     }
 
@@ -101,14 +111,12 @@ public class FigureManager {
             figure.setSettings();
             figureRender.renderSettings(figure);
         }
-         
     }
     public void closeSettings(Node node) {
         Figure figure = searchFigure(node);
         if(figure != null) {
             figureRender.deleteSettings(figure);
         }
-
     }
 
     public void updateParamFigure(Node node) {

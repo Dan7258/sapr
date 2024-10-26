@@ -2,23 +2,35 @@ package application.Primitives;
 
 import application.Primitives.PrimitiveEnum.Primitives;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class DotP extends Primitive{
     private double x;
     private double y;
-    private int radius;
+    private double radius;
     private Color color;
     private Circle circle;
     private Primitives type = Primitives.DOT;
     
-    public DotP(double x, double y, int radius, Color color) {
+    public DotP(double x, double y, double radius, Color color) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
         this.circle = new Circle(x,y, radius, color); 
+    }
+
+    public DotP(double x, double y, double radius, Color color, double width) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+        this.circle = new Circle(x,y, radius, Color.TRANSPARENT);
+        this.circle.setStroke(color);
+        this.circle.setStrokeWidth(width);
+        this.circle.setId("Ring");
     }
 
     @Override
@@ -63,12 +75,12 @@ public class DotP extends Primitive{
         return type;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(double radius) {
         this.radius = radius;
         circle.setRadius(radius);
     }
 
-    public int getRadius() {
+    public double getRadius() {
         return this.radius;
     }
     

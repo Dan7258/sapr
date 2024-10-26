@@ -52,6 +52,9 @@ public class Handler {
                         case "btnRectangle":
                         createByTwoPoints((Button)node, Figures.RECTANGLE);
                         break;
+                        case "btnCircle":
+                        createByTwoPoints((Button)node, Figures.RING);
+                        break;
                     }
                 }
             });
@@ -68,9 +71,10 @@ public class Handler {
                         figureManager.manageSettings((Node)event.getTarget());
                     }
                     if(event.getClickCount() == 1 ) {
-                        //System.out.println("a ");
+                        System.out.println(event);
                         figureManager.changeColor((Node)event.getTarget(), Color.BLUE);
                         checkDeleteButton((Node)event.getTarget());
+                        
                     }
                 });  
             }
@@ -89,7 +93,6 @@ public class Handler {
         });
         workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.getButton() == MouseButton.SECONDARY || event.getButton() == MouseButton.PRIMARY) {
-                //System.out.println("b ");
                 figureManager.setDefaultColor(target);
                 workingArea.getScene().setOnKeyPressed(null);
             }
@@ -98,16 +101,18 @@ public class Handler {
 
     private void checkchooseFigure() {
         workingArea.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if(chooseFigure == null) {
-                chooseFigure = (Node)event.getTarget();
-            }
-            if(event.getTarget() != chooseFigure && chooseFigure != null) {
-                //System.out.println("c ");
-                if(chooseFigure != workingArea) {
-                    figureManager.setDefaultColor(chooseFigure);
+            if(event.getButton() != MouseButton.MIDDLE) {
+                if(chooseFigure == null) {
+                    chooseFigure = (Node)event.getTarget();
                 }
-                chooseFigure = (Node)event.getTarget();
-            } 
+                if(event.getTarget() != chooseFigure && chooseFigure != null) {
+                    if(chooseFigure != workingArea) {
+                        figureManager.setDefaultColor(chooseFigure);
+                    }
+                    chooseFigure = (Node)event.getTarget();
+                } 
+            }
+            
         });
 
     }
@@ -132,6 +137,9 @@ public class Handler {
             break;
             case "btnRectangle":
             button.setText("Прямоугольник");
+            break;
+            case "btnCircle":
+            button.setText("Окружность");
             break;
         }
         createMode = false;
@@ -184,9 +192,11 @@ public class Handler {
         }
         form.deleteFormCoord();
         if (i.get() == 0) {
-            form.createFormCoord("0", "0", "0", "0", "Введите координаты левой границы: ");
+            String text = type == Figures.RING ? "Введите координаты центра: " : "Введите координаты левой границы: ";
+            form.createFormCoord("0", "0", "0", "0", text);
         } else {
-            form.createFormCoord("0", "0", "0", "0", "Введите координаты правой границы: ");
+            String text = type == Figures.RING ? "Введите радиус через координаты: " : "Введите координаты правой границы: ";
+            form.createFormCoord("0", "0", "0", "0", text);
         }
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {

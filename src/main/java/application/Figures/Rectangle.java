@@ -124,7 +124,7 @@ public class Rectangle extends Figure {
     }
 
     public int getRadius() {
-        return dotP1.getRadius();
+        return (int)dotP1.getRadius();
     }
 
     public void setWidth(double width) {
@@ -247,7 +247,7 @@ public class Rectangle extends Figure {
         if(((TextField)settings[10]).getText()!="") {
             radius = Integer.parseInt(((TextField)settings[10]).getText()) > 0 ? Integer.parseInt(((TextField)settings[10]).getText()) : 1; 
         } else {
-            radius = dotP1.getRadius();
+            radius = (int)dotP1.getRadius();
         }
         if(((TextField)settings[12]).getText()!="") {
             color = Color.web(((TextField)settings[12]).getText());
