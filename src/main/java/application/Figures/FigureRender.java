@@ -1,5 +1,6 @@
 package application.Figures;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -48,7 +49,7 @@ public class FigureRender {
         Control preset = null;
 
         for(Control setting: settings) {
-            if (setting instanceof TextField || setting instanceof ComboBox) {
+            if (setting instanceof TextField || setting instanceof ComboBox || setting instanceof Button) {
                 setting.setPrefWidth(width);
                 marginTop += 7 + hight;
             }

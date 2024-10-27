@@ -1,5 +1,7 @@
 package application;
 
+import java.util.ArrayList;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import application.Figures.FigureManager;
 import application.Figures.FigureEnum.Figures;
@@ -55,6 +57,9 @@ public class Handler {
                         case "btnCircle":
                         createByTwoPoints((Button)node, Figures.RING);
                         break;
+                        case "btnPolyline":
+                        createByTwoPoints((Button)node, Figures.POLYLINEF);
+                        break;
                     }
                 }
             });
@@ -71,7 +76,6 @@ public class Handler {
                         figureManager.manageSettings((Node)event.getTarget());
                     }
                     if(event.getClickCount() == 1 ) {
-                        System.out.println(event);
                         figureManager.changeColor((Node)event.getTarget(), Color.BLUE);
                         checkDeleteButton((Node)event.getTarget());
                         
@@ -141,6 +145,9 @@ public class Handler {
             case "btnCircle":
             button.setText("Окружность");
             break;
+            case "btnPolyline":
+            button.setText("Полилиния");
+            break;
         }
         createMode = false;
         form.deleteFormCoord();
@@ -155,7 +162,7 @@ public class Handler {
             if (event.getButton() == MouseButton.PRIMARY) {
                 double[] coord = new double[2];
                 coord = coordinateSystem.getRelativeCoordinate((double)event.getX(), (double)event.getY());
-                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.DOTF);
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.DOTF, false);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
             }
@@ -167,48 +174,66 @@ public class Handler {
         workingArea.getScene().setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER) {
                 double[] coordinates = form.getDataFromForm();
-                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coordinates), Figures.DOTF);
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coordinates), Figures.DOTF, false);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
             }
         });
+    }
+
+    private double[] converCollectionToArray(ArrayList<Double> coord) {
+        double[] convCoord = new double[coord.size()];
+        for(int i = 0; i < coord.size();i++) {
+            convCoord[i] = coord.get(i);
+        }
+        return convCoord;
     }
     
 
     private void createByTwoPoints(Button button, Figures type) {
         createModeDisable(chooseButton);
         createModeEnable(button);
-        double[] coord = new double[4];
+        ArrayList<Double> coord = new ArrayList<>();
         AtomicInteger i = new AtomicInteger(0);
         handleCoordinateInput(button, coord, i, type);
     }
     
-    private void handleCoordinateInput(Button button, double[] coord, AtomicInteger i, Figures type) {
-        if (i.get() >= 4) {
+    private void handleCoordinateInput(Button button, ArrayList<Double> coord, AtomicInteger i, Figures type) {
+        if (i.get() == 4) {
             if (createMode) {
-                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), type);
-                i.set(0);
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(converCollectionToArray(coord)), type, false);
+                if(type != Figures.POLYLINEF) {
+                    i.set(0);
+                    coord.clear();
+                }
+                
+            }
+        }
+        if (i.get() > 4) {
+            if (createMode) {
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(converCollectionToArray(coord)), type, true);                
             }
         }
         form.deleteFormCoord();
         if (i.get() == 0) {
             String text = type == Figures.RING ? "Введите координаты центра: " : "Введите координаты левой границы: ";
+            text = type == Figures.POLYLINEF ? "Введите координаты первой точки: " : "Введите координаты левой границы: ";
             form.createFormCoord("0", "0", "0", "0", text);
         } else {
             String text = type == Figures.RING ? "Введите радиус через координаты: " : "Введите координаты правой границы: ";
+            text = type == Figures.POLYLINEF ? "Введите координаты следующей точки: " : "Введите координаты правой границы: ";
             form.createFormCoord("0", "0", "0", "0", text);
         }
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 double[] coordm = choiceCoordinate(event);                
-                coord[i.get()] = coordm[0];
-                coord[i.get() + 1] = coordm[1];
+                coord.add(coordm[0]);
+                coord.add(coordm[1]);
                 i.addAndGet(2);
                 handleCoordinateInput(button, coord, i, type); 
             }
             if (event.getButton() == MouseButton.SECONDARY) {
                 createModeDisable(button);
-                i.set(4);
                 return;
             }
         });
@@ -233,21 +258,21 @@ public class Handler {
         return coordm;
     }
 
-    private void parseData(double[] coord, double[] data, AtomicInteger i) {
+    private void parseData(ArrayList<Double> coord, double[] data, AtomicInteger i) {
         if(data[2] == 0 && data[3] == 0) {
-            coord[i.get()] = data[0];
-            coord[i.get() + 1] = data[1];
+            coord.add(data[0]);
+            coord.add(data[1]);
         } else {
             if(i.get()==0) {
                 double x = 0 + (double)(Math.cos(data[3] * Math.PI / 180) * data[2]);
                 double y = 0 + (double)(Math.sin(data[3] * Math.PI / 180) * data[2]);
-                coord[i.get()] = x;
-                coord[i.get() + 1] = y;
+                coord.add(x);
+                coord.add(y);
             } else {
-                double x = coord[0] + (double)(Math.cos(data[3] * Math.PI / 180) * data[2]);
-                double y = coord[1] + (double)(Math.sin(data[3] * Math.PI / 180) * data[2]);
-                coord[i.get()] = x;
-                coord[i.get() + 1] = y;
+                double x = coord.get(coord.size()-2) + (double)(Math.cos(data[3] * Math.PI / 180) * data[2]);
+                double y = coord.get(coord.size()-1) + (double)(Math.sin(data[3] * Math.PI / 180) * data[2]);
+                coord.add(x);
+                coord.add(y);
             }
         }
     }

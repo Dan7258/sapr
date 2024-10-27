@@ -45,6 +45,9 @@ public class MainWindowController {
     private Button btnLine;
 
     @FXML
+    private Button btnPolyline;
+
+    @FXML
     private Tab btnProperties;
 
     @FXML
@@ -87,6 +90,7 @@ public class MainWindowController {
         assert btnCircle != null : "fx:id=\"btnCircle\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnDot != null : "fx:id=\"btnDot\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnLine != null : "fx:id=\"btnLine\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert btnPolyline != null : "fx:id=\"btnPolyline\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnProperties != null : "fx:id=\"btnProperties\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnRectangle != null : "fx:id=\"btnRectangle\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert mouseCoordinates != null : "fx:id=\"mouseCoordinates\" was not injected: check your FXML file 'mainWindow.fxml'.";

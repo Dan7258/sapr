@@ -19,7 +19,7 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("mainWindow.fxml"));
 
         scene = new Scene(fxmlLoader.load(), 640, 480);;
-
+        
         
         stage.setTitle("DanyaCad");
         stage.setScene(scene);

@@ -67,6 +67,7 @@
                         <Button fx:id="btnLine" layoutX="80.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="80.0" text="Линия" textAlignment="CENTER" />
                         <Button fx:id="btnRectangle" layoutX="160.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" text="Прямоугольник" textAlignment="CENTER" />
                         <Button fx:id="btnCircle" layoutX="280.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Окружность" textAlignment="CENTER" />
+                        <Button fx:id="btnPolyline" layoutX="370.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Полилиния" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
             </content>

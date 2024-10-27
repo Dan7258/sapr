@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Shape;
 
 
 public class FigureManager {
@@ -31,7 +33,7 @@ public class FigureManager {
         return listFigures;
     }
 
-    public void createFigure(double[] coord, Figures type) {
+    public void createFigure(double[] coord, Figures type, boolean addPoint) {
         switch (type) {
             case DOTF:
                 DotF dot = new DotF(coord[0], coord[1], 6, Color.BLACK, coordinateSystem);
@@ -53,6 +55,15 @@ public class FigureManager {
                 listFigures.add(ring);
                 figureRender.render(ring);
                 break;
+            case POLYLINEF:
+                if(addPoint) {
+                    ((PolylineF)listFigures.get(listFigures.size()-1)).addMultiplePoints(new double[]{coord[coord.length-2], coord[coord.length-1]});
+                    break;
+                }
+                PolylineF polylineF = new PolylineF(coord[0], coord[1], coord[2], coord[3], 2, Color.BLACK, coordinateSystem);
+                listFigures.add(polylineF);
+                figureRender.render(polylineF);
+                break;
         }
     }
 
@@ -68,8 +79,8 @@ public class FigureManager {
                 if(primitive.getLink() instanceof Circle) {
                     ((Circle)primitive.getLink()).setFill(color);
                 }
-                if(primitive.getLink() instanceof Line) {
-                    ((Line)primitive.getLink()).setStroke(color);
+                if(primitive.getLink() instanceof Line || primitive.getLink() instanceof Polyline) {
+                    ((Shape)primitive.getLink()).setStroke(color);
                 }
             }
         }  
