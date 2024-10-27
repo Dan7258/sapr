@@ -1,12 +1,14 @@
 package application.Figures;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
 import application.Primitives.DotP;
+import application.Primitives.PolylineP;
 import application.Primitives.Primitive;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,68 +18,76 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polyline;
 
 public class Ring extends Figure{
     private CoordinateSystem coordinateSystem;
-    private DotP dotP1;
-    private DotP dotP2;
+    private DotP dotP;
+    private PolylineP polylineP;
     private Figures type = Figures.RING;
     private Control[] settings;
     private Map<String, ObservableList<Double>> ringStyles = new HashMap<>(); 
     private double mainRadius;
     private double scale = 1;
+    private int numPoints = 100;
     
     public Ring(double x1, double y1, double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
-        dotP1 = new DotP(x1, y1, radius, color);
+        dotP = new DotP(x1, y1, radius, color);
         this.mainRadius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        dotP2 = new DotP(x1, y1, this.mainRadius, color, width);
+        this.polylineP = new PolylineP(width, color);
+        this.polylineP.removeLastPoint();
+        generateRing(x1, y1);
         this.coordinateSystem = coordinateSystem;
+        this.scale = coordinateSystem.getScale();
         ringStyles.put("──────" , FXCollections.observableArrayList());
         ringStyles.put("─ ─ ─ ─ ─" ,FXCollections.observableArrayList(10.0, 10.0));
         ringStyles.put("─·─·─·─·─" ,  FXCollections.observableArrayList(15.0, 10.0, 1.0, 8.0));
     }
 
+    private void generateRing(double centerX, double centerY) {
+        for (int i = 0; i <= this.numPoints; i++) {
+            double angle = 2 * Math.PI * i / this.numPoints;
+            double x = centerX + this.mainRadius * this.scale * Math.cos(angle);
+            double y = centerY + this.mainRadius * this.scale * Math.sin(angle);
+            polylineP.addMultiplePoints(new double[]{x,y});;
+        }
+    }
+
     @Override
     public double[] getCoordinate() {
-        return dotP1.getCoordinate();
+        double[] coordinate = Arrays.copyOf(dotP.getCoordinate(), dotP.getCoordinate().length + polylineP.getCoordinate().length);
+        System.arraycopy(polylineP.getCoordinate(), 0, coordinate,dotP.getCoordinate().length, polylineP.getCoordinate().length);
+        return coordinate;
     }
 
     @Override
     public void setCoordinate(double[] newCoordinates) {
-        dotP1.setCoordinate(newCoordinates);
-        dotP2.setCoordinate(newCoordinates);
-        // mainRadius = Math.sqrt(Math.pow(newCoordinates[2] - newCoordinates[0], 2) + Math.pow(newCoordinates[3] - newCoordinates[1], 2));
-        // dotP2.setRadius(mainRadius);
+        this.scale = coordinateSystem.getScale();
+        dotP.setCoordinate(Arrays.copyOfRange(newCoordinates, 0, 2));
+        polylineP.setCoordinate(Arrays.copyOfRange(newCoordinates, 2, newCoordinates.length));
     }
-
-    
 
     @Override
     public void changePosition(double deltaX, double deltaY) {
-        dotP1.changePosition(deltaX, deltaY); 
-        dotP2.changePosition(deltaX, deltaY); 
-        // this.x2 += deltaX;
-        // this.y2 += deltaY;
+        dotP.changePosition(deltaX, deltaY); 
+        polylineP.changePosition(deltaX, deltaY); 
     }
 
     @Override
     public void updatePosition() {
-        dotP1.updatePosition();
-        dotP2.updatePosition();
-        // this.x2 += dotP1.getCoordinate()[0] + this.mainRadius;
-        // this.y2 += dotP1.getCoordinate()[1];
+        dotP.updatePosition();
+        polylineP.updatePosition();
     }
 
     @Override
     public Color getColor() {
-        return dotP1.getColor();
+        return dotP.getColor();
     }
 
     @Override
     public void setColor(Color color) {
-        dotP1.setColor(color);
-        ((Circle)dotP2.getLink()).setStroke(color);
+        dotP.setColor(color);
+        polylineP.setColor(color);
     }
 
     @Override
@@ -86,36 +96,33 @@ public class Ring extends Figure{
     }
 
     public void setRadius(int radius) {
-        dotP1.setRadius(radius);
+        dotP.setRadius(radius);
     }
 
-    public void setMainRadius(double radius) {
-        dotP2.setRadius(radius);
-    }
-
-    public void zoom(double newRadius) {
-        scale = newRadius/this.mainRadius;
-        dotP2.setRadius(newRadius);
+    public void setMainRadius(double newRadius) {
+        this.mainRadius = newRadius;
+        polylineP.removeAllPoint();
+        generateRing(dotP.getCoordinate()[0], dotP.getCoordinate()[1]);
     }
 
     public int getRadius() {
-        return (int)dotP1.getRadius();
+        return (int)dotP.getRadius();
     }
     public double getMainRadius() {
-        return dotP2.getRadius();
+        return this.mainRadius;
     }
     
     @Override
     public void setLink(ArrayList<Node> node) {
-        dotP1.setLink(node.get(0));
-        dotP2.setLink(node.get(1));
+        dotP.setLink(node.get(0));
+        polylineP.setLink(node.get(1));
     }
 
     @Override
     public ArrayList<Primitive> getLink() {
         ArrayList<Primitive> list = new ArrayList<>();
-        list.add(dotP1);
-        list.add(dotP2);
+        list.add(dotP);
+        list.add(polylineP);
         return list;
     }
 
@@ -133,10 +140,10 @@ public class Ring extends Figure{
             "─·─·─·─·─"
         );
 
-        if(((Circle)dotP2.getLink()).getStrokeDashArray().isEmpty()) {
+        if(((Polyline)polylineP.getLink()).getStrokeDashArray().isEmpty()) {
             comboBox.setValue("──────");
         } else {
-            double[] dashArray = ((Circle)dotP2.getLink()).getStrokeDashArray().stream().mapToDouble(Double::doubleValue).toArray();
+            double[] dashArray = ((Polyline)polylineP.getLink()).getStrokeDashArray().stream().mapToDouble(Double::doubleValue).toArray();
             if(dashArray.length == 2) {
                 comboBox.setValue( "─ ─ ─ ─ ─");
             } else {
@@ -147,24 +154,25 @@ public class Ring extends Figure{
         {
             new Label("Координаты: "), 
             new Label("X1: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[0])),
             new Label("Y1: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[1])),
             new Label("Радиус: "), 
             new TextField(Integer.toString(getRadius())),
             new Label("Основной радиус: "), 
-            new TextField(Double.toString(getMainRadius() / scale)),
+            new TextField(Double.toString(getMainRadius())),
             new Label("Цвет: "), 
             new TextField(getColor().toString()),
             new Label("Тип линий: "), 
             comboBox,
             new Label("толщина линии: "), 
-            new TextField(Double.toString(((Circle)dotP2.getLink()).getStrokeWidth())),
+            new TextField(Double.toString(polylineP.getWidth())),
         };
     }
 
     @Override
     public void takeParamFromSettings() {
+        this.scale = coordinateSystem.getScale();
         double x;
         double y;
         int radius;
@@ -190,7 +198,7 @@ public class Ring extends Figure{
             radius = (int)getRadius();
         }
         if(((TextField)settings[8]).getText()!="") {
-            mainRadius = Double.parseDouble(((TextField)settings[8]).getText()) * this.scale; 
+            mainRadius = Double.parseDouble(((TextField)settings[8]).getText()); 
         } else {
             mainRadius = getMainRadius();
         }
@@ -199,16 +207,16 @@ public class Ring extends Figure{
         } else {
             color = getColor();
         }
-        ((Circle)dotP2.getLink()).getStrokeDashArray().setAll(ringStyles.get(((ComboBox)settings[12]).getValue()));
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(ringStyles.get(((ComboBox)settings[12]).getValue()));
         if(((TextField)settings[14]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[14]).getText()) > 0 ? Double.parseDouble(((TextField)settings[14]).getText()) : 1; 
         } else {
-            width = ((Circle)dotP2.getLink()).getStrokeWidth();
+            width = ((Polyline)polylineP.getLink()).getStrokeWidth();
         }
-        setCoordinate(new double[]{x,y});
+        polylineP.setWidth(width);
+        dotP.setCoordinate(new double[]{x,y});
         setColor(color);
         setRadius(radius);
         setMainRadius(mainRadius);
-        ((Circle)dotP2.getLink()).setStrokeWidth(width);
     }
 }

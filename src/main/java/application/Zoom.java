@@ -47,10 +47,6 @@ public class Zoom {
                 newCoordinates[i+1] = (coordinates[i+1] - mouseY) * scaleFactor + mouseY;
             }
             figure.setCoordinate(newCoordinates);
-            if (figure instanceof Ring) {
-                Ring ring = (Ring) figure;
-                ring.zoom(ring.getMainRadius() * scaleFactor);
-            }
         }
         
     }

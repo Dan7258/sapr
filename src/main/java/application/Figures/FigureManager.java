@@ -70,11 +70,6 @@ public class FigureManager {
     public void changeColor(Node node, Color color) {
         Figure figure = searchFigure(node);
         if(figure != null) {
-            if(figure.getType() == Figures.RING) {
-                ((Circle)(figure.getLink().get(0).getLink())).setFill(color);
-                ((Circle)(figure.getLink().get(1).getLink())).setStroke(color);
-                return;
-            }
             for(Primitive primitive : figure.getLink()) {
                 if(primitive.getLink() instanceof Circle) {
                     ((Circle)primitive.getLink()).setFill(color);

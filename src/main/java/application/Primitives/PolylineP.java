@@ -15,13 +15,20 @@ public class PolylineP extends Primitive{
     private Primitives type = Primitives.POLYLINE;
     
     public PolylineP(double x1, double y1,double x2, double y2, double width, Color color) {
-        
         this.width = width;
         this.color = color;
         this.polyline = new Polyline();
         setWidth(width);
         setColor(color);
         addMultiplePoints(new double[]{x1,y1,x2,y2});
+    }
+
+    public PolylineP(double width, Color color) {
+        this.width = width;
+        this.color = color;
+        this.polyline = new Polyline();
+        setWidth(width);
+        setColor(color);
     }
 
     public void addMultiplePoints(double[] listPoints) {
@@ -41,8 +48,11 @@ public class PolylineP extends Primitive{
             this.polyline.getPoints().remove(this.polyline.getPoints().size()-1);
             pointsList.remove(this.polyline.getPoints().size()-1);
             pointsList.remove(this.polyline.getPoints().size()-1);
-        }
-        
+        }  
+    }
+    public void removeAllPoint() {
+        this.polyline.getPoints().clear();
+        pointsList.clear();
     }
 
     @Override
@@ -56,7 +66,7 @@ public class PolylineP extends Primitive{
 
     @Override
     public void setCoordinate(double[] newCoordinates) {
-        for(int i = 0; i < this.pointsList.size(); i++) {
+        for(int i = 0; i < this.polyline.getPoints().size(); i++) {
             this.polyline.getPoints().set(i, newCoordinates[i]);
             this.pointsList.set(i, newCoordinates[i]);
         }
