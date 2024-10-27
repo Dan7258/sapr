@@ -33,12 +33,12 @@ public class Ring extends Figure{
     
     public Ring(double x1, double y1, double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
         dotP = new DotP(x1, y1, radius, color);
-        this.mainRadius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        this.coordinateSystem = coordinateSystem;
+        this.scale = coordinateSystem.getScale();
+        this.mainRadius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) / this.scale;
         this.polylineP = new PolylineP(width, color);
         this.polylineP.removeLastPoint();
         generateRing(x1, y1);
-        this.coordinateSystem = coordinateSystem;
-        this.scale = coordinateSystem.getScale();
         ringStyles.put("──────" , FXCollections.observableArrayList());
         ringStyles.put("─ ─ ─ ─ ─" ,FXCollections.observableArrayList(10.0, 10.0));
         ringStyles.put("─·─·─·─·─" ,  FXCollections.observableArrayList(15.0, 10.0, 1.0, 8.0));
