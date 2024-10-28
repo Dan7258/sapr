@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +15,7 @@ public class Form {
     private TextField textFieldAngle;
     private Label label;
     private Label labelPolar;
+    private Button btn;
 
     public Form(AnchorPane settingArea) {
         this.settingArea = settingArea;
@@ -22,7 +24,6 @@ public class Form {
     public void createFormCoord(String x, String y, String text){
         createLabel(text);
         createTextField(x, y);
-        
     }
 
     public void createFormCoord(String x, String y, String length, String angle, String text){
@@ -30,7 +31,26 @@ public class Form {
         createTextField(x, y);
         createLabelPolar();
         createTextFieldPolar(length, angle);
-        
+    }
+
+    public void createFormCoord(String x, String y, String length, String angle, String textLabel, String btnName){
+        createLabel(textLabel);
+        createTextField(x, y);
+        createLabelPolar();
+        createTextFieldPolar(length, angle);
+        createBtn(btnName);
+    }
+
+    public void createBtn(String btnName) {
+        btn = new Button(btnName);
+        btn.setLayoutX(20);
+        btn.setLayoutY(180);
+        btn.setId(btnName);
+        settingArea.getChildren().add(btn);
+    }
+
+    public void deleteBtn() {
+        settingArea.getChildren().remove(btn);
     }
     public void createLabel(String text) {
         label = new Label(text);
@@ -93,6 +113,7 @@ public class Form {
         deleteTextField();
         deleteLabelPolar();
         deleteTextFieldPolar();
+        deleteBtn();
         
     }
 

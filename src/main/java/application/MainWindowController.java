@@ -105,7 +105,7 @@ public class MainWindowController {
         figureManager = new FigureManager(workingArea, figureRender, coordinateSystem);
         form = new Form(settingArea);
         zoom = new Zoom(workingArea, figureManager, coordinateSystem);
-        handler = new Handler(area2d, workingArea, figureManager, coordinateSystem, form);
+        handler = new Handler(area2d, workingArea, settingArea, figureManager, coordinateSystem, form);
         panning = new Panning(workingArea, figureManager, coordinateSystem);
         
         

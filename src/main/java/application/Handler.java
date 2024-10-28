@@ -20,6 +20,7 @@ import javafx.util.Duration;
 public class Handler {
     private AnchorPane area2d;
     private AnchorPane workingArea;
+    private AnchorPane settingArea;
     private FigureManager figureManager;
     private Form form;
     private CoordinateSystem coordinateSystem;
@@ -29,12 +30,13 @@ public class Handler {
     
     PauseTransition pause = new PauseTransition(Duration.millis(170));
 
-    public Handler(AnchorPane area2d, AnchorPane workingArea, FigureManager figureManager, CoordinateSystem coordinateSystem, Form form) {
+    public Handler(AnchorPane area2d, AnchorPane workingArea, AnchorPane settingArea, FigureManager figureManager, CoordinateSystem coordinateSystem, Form form) {
         this.area2d = area2d;
         this.workingArea = workingArea;
         this.figureManager = figureManager;
         this.form = form;
         this.coordinateSystem = coordinateSystem;
+        this.settingArea = settingArea;
         checkButtons();
         checkEvents();
         checkchooseFigure();
@@ -192,21 +194,21 @@ public class Handler {
 
     private void createByTwoPoints(Button button, Figures type) {
         createModeDisable(chooseButton);
-        createModeEnable(button);
+        createModeEnable(button);       
         ArrayList<Double> coord = new ArrayList<>();
         AtomicInteger i = new AtomicInteger(0);
         handleCoordinateInput(button, coord, i, type);
     }
     
     private void handleCoordinateInput(Button button, ArrayList<Double> coord, AtomicInteger i, Figures type) {
+        
         if (i.get() == 4) {
             if (createMode) {
                 figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(converCollectionToArray(coord)), type, false);
                 if(type != Figures.POLYLINEF) {
                     i.set(0);
                     coord.clear();
-                }
-                
+                } 
             }
         }
         if (i.get() > 4) {
@@ -218,11 +220,12 @@ public class Handler {
         if (i.get() == 0) {
             String text = type == Figures.RING ? "Введите координаты центра: " : "Введите координаты левой границы: ";
             text = type == Figures.POLYLINEF ? "Введите координаты первой точки: " : "Введите координаты левой границы: ";
-            form.createFormCoord("0", "0", "0", "0", text);
+            checkFigureTypeAndCreateForm(type, text);
+            
         } else {
             String text = type == Figures.RING ? "Введите радиус через координаты: " : "Введите координаты правой границы: ";
             text = type == Figures.POLYLINEF ? "Введите координаты следующей точки: " : "Введите координаты правой границы: ";
-            form.createFormCoord("0", "0", "0", "0", text);
+            checkFigureTypeAndCreateForm(type, text);
         }
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -245,6 +248,63 @@ public class Handler {
                 handleCoordinateInput(button, coord, i, type);                 
             }
         });
+        Button foundButton = null;
+        for (Node node : settingArea.getChildren()) {
+            if (node instanceof Button && "По 3 точкам".equals(node.getId())) {
+                foundButton = (Button) node;
+                checkPressBtn(foundButton, button);
+                break;
+            }
+        }
+    }
+
+    private void createByThreePoints(Button button, Figures type) {
+        ArrayList<Double> coord = new ArrayList<>();
+        AtomicInteger i = new AtomicInteger(0);
+        handleCoordinatePointsInput(button, coord, i, type);
+    }
+    private void handleCoordinatePointsInput(Button button, ArrayList<Double> coord, AtomicInteger i, Figures type) {
+        if (i.get() == 6) {
+            if (createMode) {
+                double[] findCoord = findCircleCenterAndRadius(converCollectionToArray(coord));
+                figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(findCoord), type, false);
+                i.set(0);
+                coord.clear();    
+            }
+        }
+        workingArea.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                double[] coordm = new double[2];
+                boolean check = getPointCoordinate(event, coordm);
+                if(check) {
+                    coord.add(coordm[0]);
+                    coord.add(coordm[1]);
+                    i.addAndGet(2);
+                }                
+                handleCoordinatePointsInput(button, coord, i, type); 
+            }
+            if (event.getButton() == MouseButton.SECONDARY) {
+                createModeDisable(button);
+                return;
+            }
+        });
+    }
+
+    private void checkPressBtn(Button btn, Button button) {
+        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if(event.getButton() == MouseButton.PRIMARY) {
+                createByThreePoints(button, Figures.RING);
+            }
+        });
+    }
+    private void checkFigureTypeAndCreateForm(Figures type, String text) {
+        if(type == Figures.RING) {
+            form.createFormCoord("0", "0", "0", "0", text, "По 3 точкам");
+        } else if (type == Figures.POLYLINEF){
+            form.createFormCoord("0", "0", "0", "0", text);
+        } else {
+            form.createFormCoord("0", "0", "0", "0", text);
+        }
     }
 
     private double[] choiceCoordinate(MouseEvent event) {
@@ -275,6 +335,32 @@ public class Handler {
                 coord.add(y);
             }
         }
+    }
+
+    
+    private boolean getPointCoordinate(MouseEvent event, double[] coordm) {
+        if(event.getTarget() instanceof Circle) {
+            Circle circle = (Circle)event.getTarget();
+            double[] relativeCoord = coordinateSystem.getRelativeCoordinate((double)circle.getCenterX(), (double)circle.getCenterY());
+            coordm[0] = relativeCoord[0];
+            coordm[1] = relativeCoord[1];
+            return true;
+        }
+        return false;
+    }
+    private double[] findCircleCenterAndRadius(double[] coord) {
+        double mid1X = (coord[0] + coord[2]) / 2;
+        double mid1Y = (coord[1] + coord[3]) / 2;
+        double mid2X = (coord[2] + coord[4]) / 2;
+        double mid2Y = (coord[3] + coord[5]) / 2;
+
+        double slope1 = -(coord[2] - coord[0]) / (coord[3] - coord[1]);
+        double slope2 = -(coord[4] - coord[2]) / (coord[5] - coord[3]);
+
+        double centerX = (slope1 * mid1X - slope2 * mid2X + mid2Y - mid1Y) / (slope1 - slope2);
+        double centerY = slope1 * (centerX - mid1X) + mid1Y;
+
+        return new double[]{centerX, centerY, coord[0], coord[1]};
     }
     
 }
