@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import application.Figures.FigureManager;
 import application.Figures.FigureRender;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,62 +13,78 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.MenuItem;
+import java.io.Serializable;
 
-public class MainWindowController {
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+public class MainWindowController implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     @FXML
-    private AnchorPane area2d;
+    private transient ResourceBundle resources;
 
     @FXML
-    private SplitPane splitArea;
+    private transient URL location;
 
     @FXML
-    private Tab btn2D;
+    private transient AnchorPane area2d;
 
     @FXML
-    private Tab btn3D;
+    private transient SplitPane splitArea;
 
     @FXML
-    private Button btnCircle;
+    private transient Tab btn2D;
 
     @FXML
-    private Button btnDot;
+    private transient Tab btn3D;
 
     @FXML
-    private Button btnLine;
+    private transient Button btnCircle;
 
     @FXML
-    private Button btnPolyline;
+    private transient Button btnDot;
 
     @FXML
-    private Tab btnProperties;
+    private transient Button btnLine;
 
     @FXML
-    private Button btnRectangle;
+    private transient Button btnPolyline;
 
     @FXML
-    private AnchorPane settingArea;
+    private transient Tab btnProperties;
 
     @FXML
-    private Slider slider;
+    private transient Button btnRectangle;
 
     @FXML
-    private AnchorPane workingArea;
+    private transient MenuItem closeFile;
 
     @FXML
-    private Label mouseCoordinates;
+    private transient AnchorPane settingArea;
 
     @FXML
-    private Label mouseCoordinates1;
+    private transient Slider slider;
 
     @FXML
-    private Label scale;
+    private transient AnchorPane workingArea;
+
+    @FXML
+    private transient Label mouseCoordinates;
+
+    @FXML
+    private transient Label mouseCoordinates1;
+
+    @FXML
+    private transient MenuItem openFile;
+
+    @FXML
+    private transient MenuItem quit;
+
+    @FXML
+    private transient MenuItem saveFile;
+
+    @FXML
+    private transient Label scale;
     
     CoordinateSystem coordinateSystem;
     Panning panning;
@@ -79,8 +94,9 @@ public class MainWindowController {
     FigureRender figureRender;
     FigureManager figureManager;
     Zoom zoom;
+    SaveProject saveProject;
+    LoadProject loadProject;
 
-    
 
     @FXML
     void initialize() {
@@ -93,8 +109,12 @@ public class MainWindowController {
         assert btnPolyline != null : "fx:id=\"btnPolyline\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnProperties != null : "fx:id=\"btnProperties\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert btnRectangle != null : "fx:id=\"btnRectangle\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert closeFile != null : "fx:id=\"closeFile\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert mouseCoordinates != null : "fx:id=\"mouseCoordinates\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert mouseCoordinates1 != null : "fx:id=\"mouseCoordinates1\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert openFile != null : "fx:id=\"openFile\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert quit != null : "fx:id=\"quit\" was not injected: check your FXML file 'mainWindow.fxml'.";
+        assert saveFile != null : "fx:id=\"saveFile\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert scale != null : "fx:id=\"scale\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert settingArea != null : "fx:id=\"settingArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
         assert splitArea != null : "fx:id=\"splitArea\" was not injected: check your FXML file 'mainWindow.fxml'.";
@@ -107,8 +127,8 @@ public class MainWindowController {
         zoom = new Zoom(workingArea, figureManager, coordinateSystem);
         handler = new Handler(area2d, workingArea, settingArea, figureManager, coordinateSystem, form);
         panning = new Panning(workingArea, figureManager, coordinateSystem);
-        
-        
+        saveProject = new SaveProject(figureManager, quit, saveFile, closeFile);
+        loadProject = new LoadProject(figureManager, openFile);
     }
     
 

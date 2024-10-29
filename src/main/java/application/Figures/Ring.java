@@ -2,16 +2,11 @@ package application.Figures;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
 import application.Primitives.DotP;
 import application.Primitives.PolylineP;
 import application.Primitives.Primitive;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -25,8 +20,7 @@ public class Ring extends Figure{
     private DotP dotP;
     private PolylineP polylineP;
     private Figures type = Figures.RING;
-    private Control[] settings;
-    private Map<String, ObservableList<Double>> ringStyles = new HashMap<>(); 
+    private Control[] settings; 
     private double mainRadius;
     private double scale = 1;
     private int numPoints = 100;
@@ -39,9 +33,6 @@ public class Ring extends Figure{
         this.polylineP = new PolylineP(width, color);
         this.polylineP.removeLastPoint();
         generateRing(x1, y1);
-        ringStyles.put("──────" , FXCollections.observableArrayList());
-        ringStyles.put("─ ─ ─ ─ ─" ,FXCollections.observableArrayList(10.0, 10.0));
-        ringStyles.put("─·─·─·─·─" ,  FXCollections.observableArrayList(15.0, 10.0, 1.0, 8.0));
     }
 
     private void generateRing(double centerX, double centerY) {
@@ -207,7 +198,19 @@ public class Ring extends Figure{
         } else {
             color = getColor();
         }
-        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(ringStyles.get(((ComboBox)settings[12]).getValue()));
+        Double[] param = new Double[]{};
+        switch ((String)(((ComboBox)settings[12]).getValue())) {
+            case "──────":
+                param = new Double[]{};
+                break;
+            case "─ ─ ─ ─ ─":
+                param = new Double[]{10.0, 10.0};
+                break;
+            case "─·─·─·─·─":
+                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                break;
+        }
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(param);
         if(((TextField)settings[14]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[14]).getText()) > 0 ? Double.parseDouble(((TextField)settings[14]).getText()) : 1; 
         } else {

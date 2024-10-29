@@ -2,16 +2,11 @@ package application.Figures;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
 import application.Primitives.DotP;
 import application.Primitives.LineP;
 import application.Primitives.Primitive;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
@@ -27,16 +22,12 @@ public class Segment extends Figure {
     private LineP lineP;
     private Figures type = Figures.SEGMENT;
     private Control[] settings;
-    private Map<String, ObservableList<Double>> lineStyles = new HashMap<>(); 
   
     public Segment(double x1, double y1,double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
         dotP1 = new DotP(x1, y1, radius, color);
         dotP2 = new DotP(x2, y2, radius, color);
         lineP = new LineP(x1, y1, x2, y2, width, color);
         this.coordinateSystem = coordinateSystem;
-        lineStyles.put("──────" , FXCollections.observableArrayList());
-        lineStyles.put("─ ─ ─ ─ ─" ,FXCollections.observableArrayList(10.0, 10.0));
-        lineStyles.put("─·─·─·─·─" ,  FXCollections.observableArrayList(15.0, 10.0, 1.0, 8.0));
     }
 
     @Override
@@ -205,7 +196,19 @@ public class Segment extends Figure {
         } else {
             color = dotP1.getColor();
         }
-        ((Line)lineP.getLink()).getStrokeDashArray().setAll(lineStyles.get(((ComboBox)settings[14]).getValue()));
+        Double[] param = new Double[]{};
+        switch ((String)(((ComboBox)settings[14]).getValue())) {
+            case "──────":
+                param = new Double[]{};
+                break;
+            case "─ ─ ─ ─ ─":
+                param = new Double[]{10.0, 10.0};
+                break;
+            case "─·─·─·─·─":
+                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                break;
+        }
+        ((Line)lineP.getLink()).getStrokeDashArray().setAll(param);
         if(((TextField)settings[16]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[16]).getText()) > 0 ? Double.parseDouble(((TextField)settings[16]).getText()) : 1; 
         } else {

@@ -11,7 +11,7 @@ public class LineP extends Primitive {
     private double y1;
     private double x2;
     private double y2;
-    private Color color;
+    private String color;
     private double width;
     private Line line;
     private Primitives type = Primitives.LINE;
@@ -22,7 +22,7 @@ public class LineP extends Primitive {
         this.x2 = x2;
         this.y2 = y2;
         this.width = width;
-        this.color = color;
+        this.color = color.toString();
         this.line = new Line(x1, y1, x2, y2);
         setColor(color);
         setWidth(width);
@@ -64,12 +64,12 @@ public class LineP extends Primitive {
 
     @Override
     public Color getColor() {
-        return color;
+        return Color.valueOf(color);
     }
 
     @Override
     public void setColor(Color color) {
-        this.color = color;
+        this.color = color.toString();
         line.setStroke(color);
     }
 

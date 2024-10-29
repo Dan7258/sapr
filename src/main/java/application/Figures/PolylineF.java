@@ -1,16 +1,12 @@
 package application.Figures;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
 import application.Primitives.DotP;
 import application.Primitives.PolylineP;
 import application.Primitives.Primitive;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -28,15 +24,11 @@ public class PolylineF extends Figure{
     private DotP dotP;
     private Figures type = Figures.POLYLINEF;
     private Control[] settings;
-    private Map<String, ObservableList<Double>> lineStyles = new HashMap<>(); 
   
     public PolylineF(double x1, double y1,double x2, double y2, double width, Color color, CoordinateSystem coordinateSystem) {
         polylineP = new PolylineP(x1, y1, x2, y2, width, color);
         dotP = new DotP(x1, y1, width + 2, color);
         this.coordinateSystem = coordinateSystem;
-        lineStyles.put("──────" , FXCollections.observableArrayList());
-        lineStyles.put("─ ─ ─ ─ ─" ,FXCollections.observableArrayList(10.0, 10.0));
-        lineStyles.put("─·─·─·─·─" ,  FXCollections.observableArrayList(15.0, 10.0, 1.0, 8.0));
     }
 
     public void addMultiplePoints(double[] listPoints) {
@@ -148,7 +140,7 @@ public class PolylineF extends Figure{
         } else {
             double[] dashArray = ((Polyline)polylineP.getLink()).getStrokeDashArray().stream().mapToDouble(Double::doubleValue).toArray();
             if(dashArray.length == 2) {
-                comboBox1.setValue( "─ ─ ─ ─ ─");
+                comboBox1.setValue("─ ─ ─ ─ ─");
             } else {
                 comboBox1.setValue("─·─·─·─·─");
             }
@@ -228,7 +220,19 @@ public class PolylineF extends Figure{
         } else {
             color = polylineP.getColor();
         }
-        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(lineStyles.get(((ComboBox)settings[5]).getValue()));
+        Double[] param = new Double[]{};
+        switch ((String)(((ComboBox)settings[5]).getValue())) {
+            case "──────":
+                param = new Double[]{};
+                break;
+            case "─ ─ ─ ─ ─":
+                param = new Double[]{10.0, 10.0};
+                break;
+            case "─·─·─·─·─":
+                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                break;
+        }
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(param);
         if(((TextField)settings[7]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[7]).getText()) > 0 ? Double.parseDouble(((TextField)settings[7]).getText()) : 1; 
         } else {

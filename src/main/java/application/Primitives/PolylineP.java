@@ -9,14 +9,14 @@ import javafx.scene.shape.Polyline;
 
 public class PolylineP extends Primitive{
     ArrayList<Double> pointsList = new ArrayList<>();
-    private Color color;
+    private String color;
     private double width;
     private Polyline polyline;
     private Primitives type = Primitives.POLYLINE;
     
     public PolylineP(double x1, double y1,double x2, double y2, double width, Color color) {
         this.width = width;
-        this.color = color;
+        this.color = color.toString();
         this.polyline = new Polyline();
         setWidth(width);
         setColor(color);
@@ -25,7 +25,7 @@ public class PolylineP extends Primitive{
 
     public PolylineP(double width, Color color) {
         this.width = width;
-        this.color = color;
+        this.color = color.toString();
         this.polyline = new Polyline();
         setWidth(width);
         setColor(color);
@@ -90,12 +90,12 @@ public class PolylineP extends Primitive{
 
     @Override
     public Color getColor() {
-        return color;
+        return Color.valueOf(color);
     }
 
     @Override
     public void setColor(Color color) {
-        this.color = color;
+        this.color = color.toString();
         polyline.setStroke(color);
     }
 

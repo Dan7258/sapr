@@ -9,7 +9,7 @@ public class DotP extends Primitive{
     private double x;
     private double y;
     private double radius;
-    private Color color;
+    private String color;
     private Circle circle;
     private Primitives type = Primitives.DOT;
     
@@ -17,7 +17,7 @@ public class DotP extends Primitive{
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.color = color;
+        this.color = color.toString();
         this.circle = new Circle(x,y, radius, color); 
     }
 
@@ -25,7 +25,7 @@ public class DotP extends Primitive{
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.color = color;
+        this.color = color.toString();
         this.circle = new Circle(x,y, radius, Color.TRANSPARENT);
         this.circle.setStroke(color);
         this.circle.setStrokeWidth(width);
@@ -60,12 +60,12 @@ public class DotP extends Primitive{
 
     @Override
     public Color getColor() {
-        return color;
+        return Color.valueOf(color);
     }
 
     @Override
     public void setColor(Color color) {
-        this.color = color;
+        this.color = color.toString();
         circle.setFill(color);
     }
 
