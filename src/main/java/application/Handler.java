@@ -163,7 +163,7 @@ public class Handler {
         workingArea.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 double[] coord = new double[2];
-                coord = coordinateSystem.getRelativeCoordinate((double)event.getX(), (double)event.getY());
+                coord = coordinateSystem.getRelativeCoordinate(new double[]{event.getX(), event.getY()});
                 figureManager.createFigure(coordinateSystem.getAbsoluteCoordinate(coord), Figures.DOTF, false);
                 form.deleteFormCoord();
                 form.createFormCoord("0", "0", "Введите координаты: ");
@@ -311,9 +311,9 @@ public class Handler {
         double[] coordm = new double[2];
         if(event.getTarget() instanceof Circle) {
             Circle circle = (Circle)event.getTarget();
-            coordm = coordinateSystem.getRelativeCoordinate((double)circle.getCenterX(), (double)circle.getCenterY());
+            coordm = coordinateSystem.getRelativeCoordinate(new double[]{circle.getCenterX(), circle.getCenterY()});
         } else {
-            coordm = coordinateSystem.getRelativeCoordinate((double)event.getX(), (double)event.getY());
+            coordm = coordinateSystem.getRelativeCoordinate(new double[]{event.getX(), event.getY()});
         }
         return coordm;
     }
@@ -341,7 +341,7 @@ public class Handler {
     private boolean getPointCoordinate(MouseEvent event, double[] coordm) {
         if(event.getTarget() instanceof Circle) {
             Circle circle = (Circle)event.getTarget();
-            double[] relativeCoord = coordinateSystem.getRelativeCoordinate((double)circle.getCenterX(), (double)circle.getCenterY());
+            double[] relativeCoord = coordinateSystem.getRelativeCoordinate(new double[]{circle.getCenterX(), circle.getCenterY()});
             coordm[0] = relativeCoord[0];
             coordm[1] = relativeCoord[1];
             return true;

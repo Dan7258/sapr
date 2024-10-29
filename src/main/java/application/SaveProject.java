@@ -1,15 +1,18 @@
 package application;
 
+import java.util.Optional;
 import java.util.Scanner;
-import java.io.FileOutputStream;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import application.Figures.FigureManager;
 import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.TextInputDialog;
 
 public class SaveProject {
 
@@ -41,16 +44,21 @@ public class SaveProject {
     }
 
     public void saveFile() {
-        ProjectData projectData = new ProjectData(figureManager.getListFigures());
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите имя файла без расширения:");
-        String nameFile = scanner.nextLine() + ".grb";
-        try (FileOutputStream fileOut = new FileOutputStream(nameFile);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-            out.writeObject(projectData);
-            System.out.println("Project data is saved in " + nameFile);
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        TextInputDialog dialog = new TextInputDialog("Имя файла");
+        dialog.setTitle("Сохранение файла");
+        dialog.setHeaderText("Введите имя файла без расширения:");
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(name -> {
+            String nameFile = name + ".grb";
+            try (FileWriter writer = new FileWriter(nameFile)) {
+                gson.toJson(figureManager.getPreparingData(), writer);
+                System.out.println("Файл успешно сохранен как " + nameFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

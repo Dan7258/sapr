@@ -34,6 +34,17 @@ public class Ring extends Figure{
         this.polylineP.removeLastPoint();
         generateRing(x1, y1);
     }
+    public PreparingData preparingData() {
+        return new PreparingData(type, getColor().toString(), getCoordinate(), getRadius());
+    }
+
+    @Override
+    public void regenerateLink() {
+        this.dotP = new DotP(dotP.getCoordinate()[0], dotP.getCoordinate()[1], getRadius(), getColor());
+        this.polylineP = new PolylineP(getWidth(), getColor());
+        this.polylineP.removeLastPoint();
+        generateRing(dotP.getCoordinate()[0], dotP.getCoordinate()[1]);
+    }
 
     private void generateRing(double centerX, double centerY) {
         for (int i = 0; i <= this.numPoints; i++) {
@@ -96,6 +107,10 @@ public class Ring extends Figure{
         generateRing(dotP.getCoordinate()[0], dotP.getCoordinate()[1]);
     }
 
+    public double getWidth() {
+        return polylineP.getWidth();
+    }
+
     public int getRadius() {
         return (int)dotP.getRadius();
     }
@@ -145,9 +160,9 @@ public class Ring extends Figure{
         {
             new Label("Координаты: "), 
             new Label("X1: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate())[0])),
             new Label("Y1: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate())[1])),
             new Label("Радиус: "), 
             new TextField(Integer.toString(getRadius())),
             new Label("Основной радиус: "), 

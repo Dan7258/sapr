@@ -1,7 +1,6 @@
 package application.Figures;
 
 import java.util.ArrayList;
-
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
 import application.Primitives.DotP;
@@ -22,6 +21,16 @@ public class DotF extends Figure{
     public DotF(double x, double y, int radius, Color color, CoordinateSystem coordinateSystem) {
         dotP = new DotP(x, y, radius, color);
         this.coordinateSystem = coordinateSystem;
+    }
+
+    public PreparingData preparingData() {
+        double[] relativeCoord = coordinateSystem.getRelativeCoordinate(getCoordinate());
+        return new PreparingData(type, getColor().toString(), relativeCoord, getRadius());
+    }
+
+    @Override
+    public void regenerateLink() {
+        this.dotP = new DotP(getCoordinate()[0], getCoordinate()[1], getRadius(), getColor());
     }
 
     @Override
@@ -126,9 +135,9 @@ public class DotF extends Figure{
         {
             new Label("Координаты: "), 
             new Label("X: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate())[0])),
             new Label("Y: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate()[0], dotP.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP.getCoordinate())[1])),
             new Label("Радиус: "), 
             new TextField(Integer.toString(getRadius())),
             new Label("Цвет: "), 

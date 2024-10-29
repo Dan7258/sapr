@@ -16,9 +16,11 @@ public abstract class Figure {
     public abstract void setColor(Color color);
     public abstract void setLink(ArrayList<Node> node);
     public abstract ArrayList<Primitive> getLink();
+    public abstract void regenerateLink();
     public abstract void updatePosition();
     public abstract Figures getType();
     public abstract void setSettings();
     public abstract Control[] getSettings();
     public abstract void takeParamFromSettings();
+    public abstract PreparingData preparingData();
 }

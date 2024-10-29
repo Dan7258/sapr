@@ -1,18 +1,24 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
+
+import application.Figures.Figure;
 import application.Figures.FigureManager;
+import application.Figures.PreparingData;
 import javafx.scene.control.MenuItem;
-import java.io.Serializable;
+import javafx.scene.control.TextInputDialog;
 
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
-public class LoadProject implements Serializable{
-    private static final long serialVersionUID = 1L;
-    private ProjectData projectData;
+public class LoadProject {
     private FigureManager figureManager;
     private MenuItem openFile;
 
@@ -29,18 +35,26 @@ public class LoadProject implements Serializable{
     }
 
     private void openFile() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите имя файла с расширением:");
-        String nameFile = scanner.nextLine();
-        try (FileInputStream fileIn = new FileInputStream(nameFile);
-            ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            projectData = (ProjectData) in.readObject();
-            //figureManager.setListFigures(projectData.getListFigures());
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println("ProjectData class not found");
-            c.printStackTrace();
+    // Создаем диалог для ввода имени файла
+    TextInputDialog dialog = new TextInputDialog("Имя файла");
+    dialog.setTitle("Открытие файла");
+    dialog.setHeaderText("Введите имя файла без расширения:");
+    
+    Optional<String> result = dialog.showAndWait();
+
+    // Если имя файла было введено
+    result.ifPresent(name -> {
+        String nameFile = name + ".grb";
+        Gson gson = new Gson();
+        
+        try (FileReader reader = new FileReader(nameFile)) {
+            Type figureListType = new TypeToken<ArrayList<PreparingData>>(){}.getType();
+            figureManager.setListFigures(gson.fromJson(reader, figureListType));
+            System.out.println("Файл успешно открыт как " + nameFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
+    });
+}
+
 }

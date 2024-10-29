@@ -31,6 +31,16 @@ public class PolylineF extends Figure{
         this.coordinateSystem = coordinateSystem;
     }
 
+    public PreparingData preparingData() {
+        return new PreparingData(type, getColor().toString(), getCoordinate(), getRadius());
+    }
+
+    @Override
+    public void regenerateLink() {
+        this.dotP = new DotP(dotP.getCoordinate()[0], dotP.getCoordinate()[1], getRadius(), getColor());
+        this.polylineP = new PolylineP(polylineP.getCoordinate()[0], polylineP.getCoordinate()[1], polylineP.getCoordinate()[2], polylineP.getCoordinate()[3], getWidth(), getColor());
+    }
+
     public void addMultiplePoints(double[] listPoints) {
         polylineP.addMultiplePoints(listPoints);
     }

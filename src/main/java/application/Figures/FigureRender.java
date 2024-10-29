@@ -33,6 +33,13 @@ public class FigureRender {
         }
     }
 
+    public void eraseAll(ArrayList<Figure> listFigures) {
+        for(Figure figure : listFigures) {
+            erase(figure);
+        }
+        
+    }
+
     public void renderSettings(Figure figure) {
         Control[] settings = figure.getSettings();
         int marginTop = 0;

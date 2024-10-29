@@ -72,8 +72,13 @@ public class CoordinateSystem {
         });
     }
 
-    public double[] getRelativeCoordinate(double x, double y) {
-        return new double[]{(x - yAxisPosition[2]) / scaleFactor,(-y + xAxisPosition[3]) / scaleFactor};
+    public double[] getRelativeCoordinate(double[] coord) {
+        double[] newCoord = new double[coord.length];
+        for(int i = 0; i < coord.length;i+=2) {
+            newCoord[i] = (coord[i]- yAxisPosition[2]) / scaleFactor;
+            newCoord[i + 1] = (-coord[i + 1] + xAxisPosition[3]) / scaleFactor;
+        }
+        return newCoord;
     }
 
     public double[] getAbsoluteCoordinate(double[] coord) {

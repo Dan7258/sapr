@@ -1,5 +1,7 @@
 package application.Primitives;
 
+import com.google.gson.annotations.Expose;
+
 import application.Primitives.PrimitiveEnum.Primitives;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;

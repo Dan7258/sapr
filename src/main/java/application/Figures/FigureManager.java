@@ -22,6 +22,7 @@ public class FigureManager {
     private CoordinateSystem coordinateSystem;
 
     private ArrayList<Figure> listFigures = new ArrayList<>();
+    private ArrayList<PreparingData> preparingData = new ArrayList<>();
 
     public FigureManager(AnchorPane workingArea, FigureRender figureRender, CoordinateSystem coordinateSystem) {
         this.workingArea = workingArea;
@@ -32,6 +33,38 @@ public class FigureManager {
     public ArrayList<Figure> getListFigures() {
         return listFigures;
     }
+
+    public ArrayList<PreparingData> getPreparingData() {
+        for(Figure figure : listFigures) {
+            preparingData.add(figure.preparingData());
+        }
+        return preparingData;
+    }
+
+    public void setListFigures(ArrayList<PreparingData> listData) {
+        figureRender.eraseAll(this.listFigures);
+        this.listFigures.clear();
+        double[] absoluteCoord;
+        for(PreparingData data : listData) {
+            switch (data.getType()) {
+                case DOTF:
+                    absoluteCoord = coordinateSystem.getAbsoluteCoordinate(data.getCoordinate());
+                    DotF dot = new DotF(absoluteCoord[0], absoluteCoord[1], data.getRadius(), data.getColor(), coordinateSystem);
+                    listFigures.add(dot);
+                    figureRender.render(dot);
+                    break;
+                case SEGMENT:
+                    absoluteCoord = coordinateSystem.getAbsoluteCoordinate(data.getCoordinate());
+                    Segment segment = new Segment(absoluteCoord[0], absoluteCoord[1], absoluteCoord[2], absoluteCoord[3], data.getRadius(), data.getWidth(), data.getColor(), coordinateSystem);
+                    listFigures.add(segment);
+                    figureRender.render(segment);
+                    break;
+                
+            }
+        }
+    }
+
+
 
     public void createFigure(double[] coord, Figures type, boolean addPoint) {
         switch (type) {

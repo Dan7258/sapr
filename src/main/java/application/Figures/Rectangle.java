@@ -39,6 +39,21 @@ public class Rectangle extends Figure {
         lineP4 = new LineP(x2, y1, x1, y1, width, color);
         this.coordinateSystem = coordinateSystem;
     }
+    public PreparingData preparingData() {
+        return new PreparingData(type, getColor().toString(), getCoordinate(), getRadius());
+    }
+    
+    @Override
+    public void regenerateLink() {
+        this.dotP1 = new DotP(getCoordinate()[0], getCoordinate()[1], getRadius(), getColor());
+        this.dotP2 = new DotP(getCoordinate()[0], getCoordinate()[3], getRadius(), getColor());
+        this.dotP3 = new DotP(getCoordinate()[2], getCoordinate()[3], getRadius(), getColor());
+        this.dotP4 = new DotP(getCoordinate()[2], getCoordinate()[1], getRadius(), getColor());
+        this.lineP1 = new LineP(getCoordinate()[0], getCoordinate()[1], getCoordinate()[0], getCoordinate()[3], getWidth(), getColor());
+        this.lineP2 = new LineP(getCoordinate()[0], getCoordinate()[3], getCoordinate()[2], getCoordinate()[3], getWidth(), getColor());
+        this.lineP3 = new LineP(getCoordinate()[2], getCoordinate()[3], getCoordinate()[2], getCoordinate()[1], getWidth(), getColor());
+        this.lineP4 = new LineP(getCoordinate()[2], getCoordinate()[1], getCoordinate()[0], getCoordinate()[1], getWidth(), getColor());
+    }
 
     @Override
     public double[] getCoordinate() {
@@ -184,13 +199,13 @@ public class Rectangle extends Figure {
         {
             new Label("Координаты: "), 
             new Label("X1: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate())[0])),
             new Label("Y1: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate()[0], dotP1.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP1.getCoordinate())[1])),
             new Label("X2: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP3.getCoordinate()[0], dotP3.getCoordinate()[1])[0])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP3.getCoordinate())[0])),
             new Label("Y2: "), 
-            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP3.getCoordinate()[0], dotP3.getCoordinate()[1])[1])),
+            new TextField(Double.toString(coordinateSystem.getRelativeCoordinate(dotP3.getCoordinate())[1])),
             new Label("Радиус: "), 
             new TextField(Integer.toString(getRadius())),
             new Label("Цвет: "), 
