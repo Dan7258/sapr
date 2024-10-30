@@ -27,6 +27,7 @@ public class Rectangle extends Figure {
     private LineP lineP4;
     private Figures type = Figures.RECTANGLE;
     private Control[] settings;
+    private Double[] typeLine = new Double[]{};
   
     public Rectangle(double x1, double y1, double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
         dotP1 = new DotP(x1, y1, radius, color);
@@ -39,8 +40,10 @@ public class Rectangle extends Figure {
         lineP4 = new LineP(x2, y1, x1, y1, width, color);
         this.coordinateSystem = coordinateSystem;
     }
+    @Override
     public PreparingData preparingData() {
-        return new PreparingData(type, getColor().toString(), getCoordinate(), getRadius());
+        double[] relativeCoord = coordinateSystem.getRelativeCoordinate(getCoordinate());
+        return new PreparingData(type, getColor().toString(), relativeCoord, getRadius(), getWidth(), this.typeLine);
     }
     
     @Override
@@ -143,6 +146,14 @@ public class Rectangle extends Figure {
 
     public double getWidth() {
         return lineP1.getWidth();
+    }
+
+    public void setTypeLine(Double[] typeLine) {
+        this.typeLine = typeLine;
+        ((Line)lineP1.getLink()).getStrokeDashArray().setAll(this.typeLine);
+        ((Line)lineP2.getLink()).getStrokeDashArray().setAll(this.typeLine);
+        ((Line)lineP3.getLink()).getStrokeDashArray().setAll(this.typeLine);
+        ((Line)lineP4.getLink()).getStrokeDashArray().setAll(this.typeLine);
     }
     
     @Override
@@ -261,22 +272,21 @@ public class Rectangle extends Figure {
         } else {
             color = dotP1.getColor();
         }
-        Double[] param = new Double[]{};
         switch ((String)(((ComboBox)settings[14]).getValue())) {
             case "──────":
-                param = new Double[]{};
+                this.typeLine = new Double[]{};
                 break;
             case "─ ─ ─ ─ ─":
-                param = new Double[]{10.0, 10.0};
+                this.typeLine = new Double[]{10.0, 10.0};
                 break;
             case "─·─·─·─·─":
-                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                this.typeLine = new Double[]{15.0, 10.0, 1.0, 8.0};
                 break;
         }
-        ((Line)lineP1.getLink()).getStrokeDashArray().setAll(param);
-        ((Line)lineP2.getLink()).getStrokeDashArray().setAll(param);
-        ((Line)lineP3.getLink()).getStrokeDashArray().setAll(param);
-        ((Line)lineP4.getLink()).getStrokeDashArray().setAll(param);
+        ((Line)lineP1.getLink()).getStrokeDashArray().setAll(this.typeLine);
+        ((Line)lineP2.getLink()).getStrokeDashArray().setAll(this.typeLine);
+        ((Line)lineP3.getLink()).getStrokeDashArray().setAll(this.typeLine);
+        ((Line)lineP4.getLink()).getStrokeDashArray().setAll(this.typeLine);
         
         if(((TextField)settings[16]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[16]).getText()) > 0 ? Double.parseDouble(((TextField)settings[16]).getText()) : 1; 

@@ -24,6 +24,7 @@ public class Ring extends Figure{
     private double mainRadius;
     private double scale = 1;
     private int numPoints = 100;
+    private Double[] typeLine = new Double[]{};
     
     public Ring(double x1, double y1, double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
         dotP = new DotP(x1, y1, radius, color);
@@ -34,8 +35,11 @@ public class Ring extends Figure{
         this.polylineP.removeLastPoint();
         generateRing(x1, y1);
     }
+
+    @Override
     public PreparingData preparingData() {
-        return new PreparingData(type, getColor().toString(), getCoordinate(), getRadius());
+        double[] relativeCoord = coordinateSystem.getRelativeCoordinate(getCoordinate());
+        return new PreparingData(type, getColor().toString(), relativeCoord, getRadius(), getWidth(), this.typeLine);
     }
 
     @Override
@@ -117,7 +121,12 @@ public class Ring extends Figure{
     public double getMainRadius() {
         return this.mainRadius;
     }
-    
+
+    public void setTypeLine(Double[] typeLine) {
+        this.typeLine = typeLine;
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(this.typeLine);
+    }
+
     @Override
     public void setLink(ArrayList<Node> node) {
         dotP.setLink(node.get(0));
@@ -213,19 +222,18 @@ public class Ring extends Figure{
         } else {
             color = getColor();
         }
-        Double[] param = new Double[]{};
         switch ((String)(((ComboBox)settings[12]).getValue())) {
             case "──────":
-                param = new Double[]{};
+                this.typeLine = new Double[]{};
                 break;
             case "─ ─ ─ ─ ─":
-                param = new Double[]{10.0, 10.0};
+                this.typeLine = new Double[]{10.0, 10.0};
                 break;
             case "─·─·─·─·─":
-                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                this.typeLine = new Double[]{15.0, 10.0, 1.0, 8.0};
                 break;
         }
-        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(param);
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(this.typeLine);
         if(((TextField)settings[14]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[14]).getText()) > 0 ? Double.parseDouble(((TextField)settings[14]).getText()) : 1; 
         } else {

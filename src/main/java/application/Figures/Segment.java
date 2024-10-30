@@ -22,6 +22,7 @@ public class Segment extends Figure {
     private LineP lineP;
     private Figures type = Figures.SEGMENT;
     private Control[] settings;
+    private Double[] typeLine = new Double[]{};
   
     public Segment(double x1, double y1,double x2, double y2, int radius, double width, Color color, CoordinateSystem coordinateSystem) {
         dotP1 = new DotP(x1, y1, radius, color);
@@ -33,7 +34,7 @@ public class Segment extends Figure {
     @Override
     public PreparingData preparingData() {
         double[] relativeCoord = coordinateSystem.getRelativeCoordinate(getCoordinate());
-        return new PreparingData(type, getColor().toString(), relativeCoord, getRadius(), getWidth());
+        return new PreparingData(type, getColor().toString(), relativeCoord, getRadius(), getWidth(), this.typeLine);
     }
 
     @Override
@@ -101,6 +102,11 @@ public class Segment extends Figure {
 
     public double getWidth() {
         return lineP.getWidth();
+    }
+
+    public void setTypeLine(Double[] typeLine) {
+        this.typeLine = typeLine;
+        ((Line)lineP.getLink()).getStrokeDashArray().setAll(this.typeLine);
     }
     
     @Override
@@ -209,19 +215,18 @@ public class Segment extends Figure {
         } else {
             color = dotP1.getColor();
         }
-        Double[] param = new Double[]{};
         switch ((String)(((ComboBox)settings[14]).getValue())) {
             case "──────":
-                param = new Double[]{};
+                this.typeLine = new Double[]{};
                 break;
             case "─ ─ ─ ─ ─":
-                param = new Double[]{10.0, 10.0};
+                this.typeLine = new Double[]{10.0, 10.0};
                 break;
             case "─·─·─·─·─":
-                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                this.typeLine = new Double[]{15.0, 10.0, 1.0, 8.0};
                 break;
         }
-        ((Line)lineP.getLink()).getStrokeDashArray().setAll(param);
+        ((Line)lineP.getLink()).getStrokeDashArray().setAll(this.typeLine);
         if(((TextField)settings[16]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[16]).getText()) > 0 ? Double.parseDouble(((TextField)settings[16]).getText()) : 1; 
         } else {

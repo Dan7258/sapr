@@ -1,6 +1,8 @@
 package application.Figures;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import application.Primitives.Primitive;
 import application.CoordinateSystem;
 import application.Figures.FigureEnum.Figures;
@@ -35,6 +37,7 @@ public class FigureManager {
     }
 
     public ArrayList<PreparingData> getPreparingData() {
+        preparingData.clear();
         for(Figure figure : listFigures) {
             preparingData.add(figure.preparingData());
         }
@@ -56,8 +59,31 @@ public class FigureManager {
                 case SEGMENT:
                     absoluteCoord = coordinateSystem.getAbsoluteCoordinate(data.getCoordinate());
                     Segment segment = new Segment(absoluteCoord[0], absoluteCoord[1], absoluteCoord[2], absoluteCoord[3], data.getRadius(), data.getWidth(), data.getColor(), coordinateSystem);
+                    segment.setTypeLine(data.getTypeLine());
                     listFigures.add(segment);
                     figureRender.render(segment);
+                    break;
+                case RECTANGLE:
+                    absoluteCoord = coordinateSystem.getAbsoluteCoordinate(data.getCoordinate());
+                    Rectangle rectangle = new Rectangle(absoluteCoord[0], absoluteCoord[1], absoluteCoord[2], absoluteCoord[3], data.getRadius(), data.getWidth(), data.getColor(), coordinateSystem);
+                    rectangle.setTypeLine(data.getTypeLine());
+                    listFigures.add(rectangle);
+                    figureRender.render(rectangle);
+                    break;
+                case RING:
+                    absoluteCoord = coordinateSystem.getAbsoluteCoordinate(data.getCoordinate());
+                    Ring ring = new Ring(absoluteCoord[0], absoluteCoord[1], absoluteCoord[2], absoluteCoord[3], data.getRadius(), data.getWidth(), data.getColor(), coordinateSystem);
+                    ring.setTypeLine(data.getTypeLine());
+                    listFigures.add(ring);
+                    figureRender.render(ring);
+                    break;
+                case POLYLINEF:
+                    absoluteCoord = coordinateSystem.getAbsoluteCoordinate(data.getCoordinate());
+                    PolylineF polylineF = new PolylineF(absoluteCoord[0], absoluteCoord[1], absoluteCoord[2], absoluteCoord[3], data.getWidth(), data.getColor(), coordinateSystem);
+                    polylineF.addMultiplePoints(Arrays.copyOfRange(absoluteCoord, 4, absoluteCoord.length));
+                    polylineF.setTypeLine(data.getTypeLine());
+                    listFigures.add(polylineF);
+                    figureRender.render(polylineF);
                     break;
                 
             }

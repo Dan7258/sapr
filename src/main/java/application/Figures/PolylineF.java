@@ -24,15 +24,17 @@ public class PolylineF extends Figure{
     private DotP dotP;
     private Figures type = Figures.POLYLINEF;
     private Control[] settings;
+    private Double[] typeLine = new Double[]{};
   
     public PolylineF(double x1, double y1,double x2, double y2, double width, Color color, CoordinateSystem coordinateSystem) {
         polylineP = new PolylineP(x1, y1, x2, y2, width, color);
         dotP = new DotP(x1, y1, width + 2, color);
         this.coordinateSystem = coordinateSystem;
     }
-
+    @Override
     public PreparingData preparingData() {
-        return new PreparingData(type, getColor().toString(), getCoordinate(), getRadius());
+        double[] relativeCoord = coordinateSystem.getRelativeCoordinate(getCoordinate());
+        return new PreparingData(type, getColor().toString(), relativeCoord, getRadius(), getWidth(), this.typeLine);
     }
 
     @Override
@@ -101,6 +103,11 @@ public class PolylineF extends Figure{
 
     public double getWidth() {
         return polylineP.getWidth();
+    }
+
+    public void setTypeLine(Double[] typeLine) {
+        this.typeLine = typeLine;
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(this.typeLine);
     }
     
     @Override
@@ -230,19 +237,18 @@ public class PolylineF extends Figure{
         } else {
             color = polylineP.getColor();
         }
-        Double[] param = new Double[]{};
         switch ((String)(((ComboBox)settings[5]).getValue())) {
             case "──────":
-                param = new Double[]{};
+                this.typeLine = new Double[]{};
                 break;
             case "─ ─ ─ ─ ─":
-                param = new Double[]{10.0, 10.0};
+                this.typeLine = new Double[]{10.0, 10.0};
                 break;
             case "─·─·─·─·─":
-                param = new Double[]{15.0, 10.0, 1.0, 8.0};
+                this.typeLine = new Double[]{15.0, 10.0, 1.0, 8.0};
                 break;
         }
-        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(param);
+        ((Polyline)polylineP.getLink()).getStrokeDashArray().setAll(this.typeLine);
         if(((TextField)settings[7]).getText()!="") {
             width = Double.parseDouble(((TextField)settings[7]).getText()) > 0 ? Double.parseDouble(((TextField)settings[7]).getText()) : 1; 
         } else {

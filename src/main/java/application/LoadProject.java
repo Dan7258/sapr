@@ -2,14 +2,11 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
-
-import application.Figures.Figure;
 import application.Figures.FigureManager;
 import application.Figures.PreparingData;
 import javafx.scene.control.MenuItem;
@@ -35,14 +32,12 @@ public class LoadProject {
     }
 
     private void openFile() {
-    // Создаем диалог для ввода имени файла
     TextInputDialog dialog = new TextInputDialog("Имя файла");
     dialog.setTitle("Открытие файла");
     dialog.setHeaderText("Введите имя файла без расширения:");
     
     Optional<String> result = dialog.showAndWait();
 
-    // Если имя файла было введено
     result.ifPresent(name -> {
         String nameFile = name + ".grb";
         Gson gson = new Gson();
@@ -50,7 +45,7 @@ public class LoadProject {
         try (FileReader reader = new FileReader(nameFile)) {
             Type figureListType = new TypeToken<ArrayList<PreparingData>>(){}.getType();
             figureManager.setListFigures(gson.fromJson(reader, figureListType));
-            System.out.println("Файл успешно открыт как " + nameFile);
+            System.out.println("file open " + nameFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

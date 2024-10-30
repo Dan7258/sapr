@@ -9,6 +9,7 @@ public class PreparingData {
     private double[] coordinate;
     private double radius;
     private double width;
+    private Double[] typeLine;
     public PreparingData(Figures type, String color, double[] coordinate, double radius) {
         this.type = type;
         this.color = color;
@@ -16,12 +17,13 @@ public class PreparingData {
         this.radius = radius;
     }   
 
-    public PreparingData(Figures type, String color, double[] coordinate, double radius, double width) {
+    public PreparingData(Figures type, String color, double[] coordinate, double radius, double width, Double[] typeLine) {
         this.type = type;
         this.color = color;
         this.coordinate = coordinate;
         this.radius = radius;
         this.width = width;
+        this.typeLine = typeLine;
     }  
 
     public Color getColor() {
@@ -39,6 +41,10 @@ public class PreparingData {
     }
     public double getWidth() {
         return this.width;
+    }
+
+    public Double[] getTypeLine() {
+        return this.typeLine;
     }
 
 }
